@@ -16,7 +16,7 @@ const FeaturesSection = () => {
     {
       title: "Background Remover", 
       description: "Remove unwanted backgrounds from images effortlessly.",
-      image: "/images/tools/background-remover.png"
+      image: "/images/tools/Background-Remover.png"
     },
     {
       title: "Model Photo to Video",
@@ -26,7 +26,7 @@ const FeaturesSection = () => {
     {
       title: "Image Enhancer",
       description: "Improve lighting, sharpness, and resolution to create platform-ready, high-quality images.",
-      image: "/images/tools/image-enhancer.png"
+      image: "/images/tools/Image-Enhancer.png"
     }
   ];
 
