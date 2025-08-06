@@ -1,7 +1,7 @@
 import React from 'react';
 import {  Facebook, Twitter, Instagram,  Linkedin } from 'lucide-react';
 
-const SnapfitFooter = () => {
+const Footer = () => {
   const socialLinks = [
     { icon: Facebook, href: '#', label: 'Facebook' },
     { icon: Twitter, href: '#', label: 'Twitter' },
@@ -134,4 +134,4 @@ const SnapfitFooter = () => {
   );
 };
 
-export default SnapfitFooter;
+export default Footer;

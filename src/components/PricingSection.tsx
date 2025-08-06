@@ -1,150 +1,157 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useState } from "react";
+import { Plus, Minus } from "lucide-react";
+
+interface Plan {
+  id: string;
+  name: string;
+  price: number;
+  credits: number;
+  description: string;
+  features: string[];
+  buttonText: string;
+  popular: boolean;
+}
+
+interface FAQ {
+  question: string;
+  answer: string;
+}
 
 const PricingSection = () => {
-  const plans = [
+  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+
+  const snapfitPlans: Plan[] = [
     {
-      name: "Free",
-      price: "$0",
-      period: "",
-      description: "Perfect for trying out our AI tools",
+      id: "freemium",
+      name: "Freemium",
+      price: 0,
+      credits: 6,
+      description: "Try SnapFit with 3 free images",
       features: [
-        "5 AI credits",
-        "Basic AI photo editing",
+        "3 free product images",
+        "Basic image processing",
+        "Limited-time access",
+      ],
+      buttonText: "Get Started Free",
+      popular: false
+    },
+    {
+      id: "basic",
+      name: "Basic Plan",
+      price: 5000,
+      credits: 40,
+      description: "Perfect for small businesses",
+      features: [
+        "20 product images", 
+        "Basic support",
         "Standard quality exports",
-        "Community support",
-        "Watermarked outputs"
+        "Commercial usage rights"
       ],
-      buttonText: "Get Started",
+      buttonText: "Choose Basic",
       popular: false
     },
     {
-      name: "Starter",
-      price: "$23.2",
-      originalPrice: "$29",
-      period: "/month",
-      description: "Great for small businesses and freelancers",
+      id: "standard",
+      name: "Standard Plan",
+      price: 12500,
+      credits: 100,
+      description: "Ideal for growing businesses",
       features: [
-        "200 AI credits/month",
-        "All AI editing tools",
+        "50 product images", 
+        "Priority support", 
+        "Premium features",
         "HD quality exports",
-        "Priority support",
-        "No watermarks",
-        "Commercial usage rights",
-        "API access"
+        "Advanced processing",
+        "Bulk operations"
       ],
-      buttonText: "Buy Now",
-      popular: false
-    },
-    {
-      name: "Growth",
-      price: "$63.2",
-      originalPrice: "$79",
-      period: "/month",
-      description: "Perfect for growing e-commerce businesses",
-      features: [
-        "600 AI credits/month",
-        "All AI editing tools",
-        "4K quality exports",
-        "Priority support",
-        "No watermarks",
-        "Commercial usage rights",
-        "API access",
-        "Bulk processing",
-        "Custom backgrounds"
-      ],
-      buttonText: "Buy Now",
+      buttonText: "Choose Standard",
       popular: true
-    },
-    {
-      name: "Advanced",
-      price: "$79.2",
-      originalPrice: "$99",
-      period: "/month",
-      description: "For large businesses and agencies",
-      features: [
-        "1,200 AI credits/month",
-        "All AI editing tools",
-        "8K quality exports",
-        "24/7 premium support",
-        "No watermarks",
-        "Commercial usage rights",
-        "Full API access",
-        "Bulk processing",
-        "Custom backgrounds",
-        "White label solutions",
-        "Team collaboration",
-        "Advanced analytics"
-      ],
-      buttonText: "Buy Now",
-      popular: false
     }
   ];
 
+  const faqs: FAQ[] = [
+    {
+      question: "How do SnapFit credits work?",
+      answer: "Credits are used to process your product images with AI background replacement. Each image processing consumes credits based on the complexity and size of the image."
+    },
+    {
+      question: "Can I upgrade my plan anytime?",
+      answer: "Yes, you can upgrade your plan at any time. Your remaining credits will be preserved and additional credits from the new plan will be added to your account."
+    },
+    {
+      question: "What happens after I use all my credits?",
+      answer: "Once you've used all your credits, you can purchase a new plan to continue using SnapFit. The Freemium plan resets periodically for continued free access."
+    },
+    {
+      question: "Do you offer refunds?",
+      answer: "We offer a satisfaction guarantee. If you're not happy with your purchase within 7 days and haven't used more than 20% of your credits, we'll provide a full refund."
+    }
+  ];
+
+ 
+
+  const toggleFAQ = (index: number) => {
+    setOpenFAQ(openFAQ === index ? null : index);
+  };
+
   return (
-    <section id="pricing" className="py-16 bg-muted/30">
+    <section id="pricing" className="py-16 bg-gradient-to-br from-lime-50 to-green-50 dark:from-lime-950/20 dark:to-green-950/20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="text-primary">Pricing</span> Plan
+            <span className="text-lime-600 dark:text-lime-400">SnapFit</span> Pricing Plans
           </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Whether you need a simple image editor or a powerful AI art creator, we have the right plan for you. 
-            Get the AI-powered creative tools you need at a price that works.
+          <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+            Transform your product images with AI-powered background replacement. 
+            Choose the perfect plan for your business needs.
           </p>
         </div>
 
-        {/* Billing Toggle */}
-        <div className="flex justify-center mb-12">
-          <div className="bg-muted rounded-lg p-1 flex">
-            <button className="px-6 py-2 rounded-md bg-primary text-primary-foreground font-medium">
-              Monthly
-            </button>
-            <button className="px-6 py-2 rounded-md text-muted-foreground hover:text-foreground transition-colors">
-              Annual (20% OFF)
-            </button>
-          </div>
-        </div>
-
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {plans.map((plan, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 max-w-5xl mx-auto">
+          {snapfitPlans.map((plan) => (
             <Card
-              key={index}
-              className={`relative p-6 h-fit ${
+              key={plan.id}
+              className={`relative p-6 h-fit bg-white dark:bg-slate-900 border-2 transition-all duration-300 hover:shadow-xl ${
                 plan.popular
-                  ? "border-primary shadow-lg scale-105"
-                  : "border-border hover:border-primary/50"
-              } transition-all duration-300`}
+                  ? "border-lime-500 shadow-lg scale-105 shadow-lime-500/25"
+                  : "border-slate-200 dark:border-slate-700 hover:border-lime-300 dark:hover:border-lime-600"
+              }`}
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
+                  <span className="bg-gradient-to-r from-lime-500 to-green-500 text-white px-4 py-1 rounded-full text-sm font-medium shadow-lg">
                     Most Popular
                   </span>
                 </div>
               )}
 
               <div className="text-center mb-6">
-                <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
+                <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">{plan.name}</h3>
                 <div className="mb-2">
-                  <span className="text-3xl font-bold">{plan.price}</span>
-                  {plan.originalPrice && (
-                    <span className="text-lg text-muted-foreground line-through ml-2">
-                      {plan.originalPrice}
-                    </span>
+                  <span className="text-3xl font-bold text-slate-900 dark:text-white">{plan.price === 0 ? "Free" : `₨${plan.price}`}</span>
+                  {plan.price > 0 && (
+                    <span className="text-slate-500 dark:text-slate-400 text-sm ml-1">one-time</span>
                   )}
-                  <span className="text-muted-foreground">{plan.period}</span>
                 </div>
-                <p className="text-sm text-muted-foreground">{plan.description}</p>
+                <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">{plan.description}</p>
+                <div className="text-sm font-medium text-lime-600 dark:text-lime-400 bg-lime-100 dark:bg-lime-900/30 px-3 py-1 rounded-full inline-block">
+                  {plan.credits} credits included
+                </div>
               </div>
 
               <Button
-                className={`w-full mb-6 ${
+                className={`w-full mb-6 font-medium transition-all duration-200 ${
                   plan.popular
-                    ? "bg-primary hover:bg-primary-hover text-primary-foreground"
-                    : "bg-foreground text-background hover:bg-foreground/90"
+                    ? "bg-gradient-to-r from-lime-600 to-green-600 hover:from-lime-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl"
+                    : plan.price === 0
+                    ? "bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white dark:border-slate-600"
+                    : "bg-lime-500 hover:bg-lime-600 text-white shadow-md hover:shadow-lg"
                 }`}
               >
                 {plan.buttonText}
@@ -154,7 +161,7 @@ const PricingSection = () => {
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start space-x-2">
                     <svg
-                      className="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                      className="w-5 h-5 text-lime-500 mt-0.5 flex-shrink-0"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -164,7 +171,7 @@ const PricingSection = () => {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span className="text-sm text-foreground">{feature}</span>
+                    <span className="text-sm text-slate-700 dark:text-slate-200">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -174,44 +181,42 @@ const PricingSection = () => {
 
         {/* Comparison Table */}
         <div className="mb-16">
-          <h3 className="text-2xl font-bold text-center mb-8">
-            <span className="text-primary">Compare</span> Plans
+          <h3 className="text-2xl font-bold text-center mb-8 text-slate-900 dark:text-white">
+            <span className="text-lime-600 dark:text-lime-400">Compare</span> Plans
           </h3>
           
-          <div className="bg-card rounded-lg overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-lg overflow-hidden shadow-lg border border-slate-200 dark:border-slate-700 max-w-4xl mx-auto">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-muted/50">
+                <thead className="bg-lime-50 dark:bg-lime-950/50">
                   <tr>
-                    <th className="text-left p-4 font-semibold">Subscription Plans</th>
-                    <th className="text-center p-4 font-semibold">Free</th>
-                    <th className="text-center p-4 font-semibold">Starter</th>
-                    <th className="text-center p-4 font-semibold">Growth</th>
-                    <th className="text-center p-4 font-semibold bg-primary/10">Advanced</th>
+                    <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Features</th>
+                    <th className="text-center p-4 font-semibold text-slate-900 dark:text-white">Freemium</th>
+                    <th className="text-center p-4 font-semibold text-slate-900 dark:text-white">Basic</th>
+                    <th className="text-center p-4 font-semibold text-slate-900 dark:text-white bg-lime-100 dark:bg-lime-900/30">Standard</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">
-                  <tr>
-                    <td className="p-4 font-medium">Credits Benefits</td>
-                    <td className="p-4 text-center">5 credits</td>
-                    <td className="p-4 text-center">200 credits/mo</td>
-                    <td className="p-4 text-center">600 credits/mo</td>
-                    <td className="p-4 text-center bg-primary/5">1,200 credits/mo</td>
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+                  <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="p-4 font-medium text-slate-900 dark:text-white">Product Images</td>
+                    <td className="p-4 text-center text-slate-600 dark:text-slate-300">3 images</td>
+                    <td className="p-4 text-center text-slate-600 dark:text-slate-300">20 images</td>
+                    <td className="p-4 text-center text-slate-600 dark:text-slate-300 bg-lime-50 dark:bg-lime-900/20">50 images</td>
                   </tr>
-                  <tr>
-                    <td className="p-4 font-medium">AI Tools Access</td>
-                    <td className="p-4 text-center">Basic</td>
-                    <td className="p-4 text-center">Full Access</td>
-                    <td className="p-4 text-center">Full Access</td>
-                    <td className="p-4 text-center bg-primary/5">Full Access</td>
+                  <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="p-4 font-medium text-slate-900 dark:text-white">Credits Included</td>
+                    <td className="p-4 text-center text-slate-600 dark:text-slate-300">6 credits</td>
+                    <td className="p-4 text-center text-slate-600 dark:text-slate-300">40 credits</td>
+                    <td className="p-4 text-center text-slate-600 dark:text-slate-300 bg-lime-50 dark:bg-lime-900/20">100 credits</td>
                   </tr>
-                  <tr>
-                    <td className="p-4 font-medium">Export Quality</td>
-                    <td className="p-4 text-center">Standard</td>
-                    <td className="p-4 text-center">HD</td>
-                    <td className="p-4 text-center">4K</td>
-                    <td className="p-4 text-center bg-primary/5">8K</td>
+                  <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="p-4 font-medium text-slate-900 dark:text-white">Support Level</td>
+                    <td className="p-4 text-center text-slate-600 dark:text-slate-300">Community</td>
+                    <td className="p-4 text-center text-slate-600 dark:text-slate-300">Basic Support</td>
+                    <td className="p-4 text-center text-slate-600 dark:text-slate-300 bg-lime-50 dark:bg-lime-900/20">Priority Support</td>
                   </tr>
+             
+              
                 </tbody>
               </table>
             </div>
@@ -220,28 +225,37 @@ const PricingSection = () => {
 
         {/* FAQ Section */}
         <div className="max-w-3xl mx-auto">
-          <h3 className="text-2xl font-bold text-center mb-8">
+          <h3 className="text-2xl font-bold text-center mb-8 text-slate-900 dark:text-white">
             Frequently Asked Questions
           </h3>
           
           <div className="space-y-4">
-            {[
-              {
-                question: "Is there a free trial available?",
-                answer: "Yes, we offer a free plan with 5 AI credits so you can try our platform without any cost. The trial includes basic editing features, and you'll get unlimited access to explore our interface."
-              },
-              {
-                question: "How do credits work?",
-                answer: "Credits are used for AI-powered enhancements. Each tool consumes different amounts of credits based on complexity."
-              },
-              {
-                question: "Can I use the images I create for commercial purposes?",
-                answer: "Yes, all paid plans include commercial usage rights for the images you create."
-              }
-            ].map((faq, index) => (
-              <div key={index} className="bg-card rounded-lg p-6">
-                <h4 className="font-semibold mb-2">{faq.question}</h4>
-                <p className="text-muted-foreground text-sm">{faq.answer}</p>
+            {faqs.map((faq, index) => (
+              <div key={index} className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-200">
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  className="w-full p-6 text-left flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 rounded-lg"
+                >
+                  <h4 className="font-semibold text-slate-900 dark:text-white pr-4">{faq.question}</h4>
+                  <div className="flex-shrink-0">
+                    {openFAQ === index ? (
+                      <Minus className="w-5 h-5 text-lime-600 dark:text-lime-400 transition-transform duration-200" />
+                    ) : (
+                      <Plus className="w-5 h-5 text-lime-600 dark:text-lime-400 transition-transform duration-200" />
+                    )}
+                  </div>
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    openFAQ === index ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                  }`}
+                >
+                  <div className="px-6 pb-6">
+                    <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                      {faq.answer}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
