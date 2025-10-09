@@ -6,15 +6,14 @@ const HeroSection = () => {
     <section className="py-16 s ">
       <div className="container mx-auto px-4 text-center">
         <h1 className="text-4xl md:text-6xl font-bold mb-6 text-slate-900">
-          Turn Ordinary Product Photos into{" "}
+          Stop Losing Sales to Bad Product Images{" "}
           <span className="bg-gradient-to-r from-slate-600 to-lime-600 bg-clip-text text-transparent">
             Extraordinary Sales Drivers
           </span>
         </h1>
         
         <p className="text-lg md:text-xl text-slate-800 mb-8 max-w-3xl mx-auto">
-          Stop letting mediocre images hurt your sales. SnapFit uses AI to effortlessly create stunning, high-converting 
-          product visuals that can boost your conversions by up to 20%.
+          Upload your product → pick a model → get instant, royalty-free images and videos. Scalable for startups to enterprises.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -29,7 +28,7 @@ const HeroSection = () => {
           {/* Upload Section */}
           <div>
             <h3 className="text-xl font-bold mb-4 text-left text-slate-900">Upload your product</h3>
-            <p className="mb-6 text-left text-slate-800">One image is all it takes.</p>
+            <p className="mb-6 text-left text-slate-800"> Flat-lay, mannequin, or packshot - SnapFit accepts all.</p>
             <div className="bg-white/30 backdrop-blur-sm border border-white/40 rounded-lg aspect-[3/4] flex flex-col p-4">
               <div className="relative flex-1 w-full bg-white/70 backdrop-blur-sm border border-white/60 rounded-lg overflow-hidden shadow-lg">
                 <Image
@@ -55,14 +54,15 @@ const HeroSection = () => {
                 />
               </div>
             </div>
-                <h3 className="text-xl font-bold mt-4 text-left text-slate-900">Style the Scene</h3>
-            <p className="mb-6 text-left text-slate-800">Describe your model, style, and background.</p>
+                <h3 className="text-xl font-bold mt-4 text-left text-slate-900">Customize the Shoot</h3>
+            <p className="mb-6 text-left text-slate-800">Pick your model, pose, and background - or let AI auto-style i</p>
           </div>
 
           {/* Create & Share Section */}
           <div>
-            <h3 className="text-xl font-bold mb-4 text-left text-slate-900">Create & Share</h3>
-            <p className="mb-6 text-left text-slate-800">Get eye-catching photos and videos in minutes, and {"it's "}ready for any platform!</p>
+            <h3 className="text-xl font-bold mb-4 text-left text-slate-900">Generate & Download</h3>
+            <p className="mb-6 text-left text-slate-800"> Get studio-quality images and videos in seconds. Perfectly sized for e-commerce platforms.
+</p>
             <div className="bg-white/30 backdrop-blur-sm border border-white/40 rounded-lg aspect-[3/4] flex flex-col p-4">
               <div className="relative flex-1 w-full bg-white/70 backdrop-blur-sm border border-white/60 rounded-lg overflow-hidden shadow-lg">
                 <video
