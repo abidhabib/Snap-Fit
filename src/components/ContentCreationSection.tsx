@@ -71,7 +71,7 @@ const ContentCreationSection = () => {
             <div className="order-1 lg:order-2 relative rounded-xl overflow-hidden aspect-video bg-background flex items-center justify-center">
               <div className="absolute inset-0 flex items-center justify-center p-2 sm:p-4">
                 <Image
-                  src="/images/content1.png"
+                  src="/images/content2.png"
                   alt="All-in-One Solution Preview"
                   fill
                   className="object-contain rounded-lg"
