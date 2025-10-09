@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Camera, Edit3, Video, Menu, X, ChevronRight } from "lucide-react";
+import { ChevronDown, Camera, Edit3, Video, Menu, X, ChevronRight, Sparkles, User, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
@@ -11,10 +11,13 @@ interface Tool {
   video?: string;
   poster?: string;
   type: "image" | "video";
+  description: string;
+  comingSoon?: boolean;
 }
 
 interface ToolCategory {
   title: string;
+  description: string;
   tools: Tool[];
 }
 
@@ -22,51 +25,74 @@ const Header = () => {
   const [isToolsOpen, setIsToolsOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileToolsOpen, setIsMobileToolsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toolsCategories: ToolCategory[] = [
     {
-      title: "AI Model Image",
+      title: "AI Model Try-On",
+      description: "Visualize products on diverse models",
       tools: [
         { 
           name: "Virtual Try-on", 
           image: "/images/tools/clothes-to-model.png",
-          type: "image"
+          type: "image",
+          description: "See clothes on AI models instantly"
         },
       ]
     },
     {
       title: "AI Editor",
+      description: "Enhance and transform your images",
       tools: [
         { 
           name: "Background Remover", 
           image: "/images/tools/Background-Remover.png",
-          type: "image"
+          type: "image",
+          description: "Remove backgrounds automatically"
         },
         { 
           name: "Image Enhancer", 
           image: "/images/tools/Image-Enhancer.png",
-          type: "image"
+          type: "image",
+          description: "Improve image quality with AI"
         },
       ]
     },
     {
       title: "AI Video",
+      description: "Create engaging product videos",
       tools: [
         { 
           name: "Image to Video", 
           video: "/images/tools/image-to-video.mp4",
           poster: "/images/tools/image-to-video-poster.jpg",
-          type: "video"
+          type: "video",
+          description: "Transform images into videos",
+          comingSoon: true
         },
         { 
-          name: "HandiCraft Try-on", 
+          name: "Accessory Try-on", 
           image: "/images/tools/accessories-to-model.png",
-          type: "image"
+          type: "image",
+          description: "Try accessories on models",
+          comingSoon: true
         },
       ]
     }
   ];
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      setScrolled(isScrolled);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Close mobile menu when screen size changes
   useEffect(() => {
@@ -79,6 +105,18 @@ const Header = () => {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsToolsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // Prevent body scroll when mobile menu is open
@@ -104,16 +142,12 @@ const Header = () => {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setIsToolsOpen(false);
-    }, 300);
-  };
-
-  const toggleTools = () => {
-    setIsToolsOpen(!isToolsOpen);
+    }, 200);
   };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-    setIsMobileToolsOpen(false); // Close tools submenu when toggling main menu
+    setIsMobileToolsOpen(false);
   };
 
   const toggleMobileTools = () => {
@@ -128,85 +162,102 @@ const Header = () => {
   const getIconForCategory = (categoryIndex: number) => {
     switch (categoryIndex) {
       case 0:
-        return <Camera className="w-4 h-4 text-lime-600" />;
+        return <User className="w-4 h-4 text-lime-600" />;
       case 1:
         return <Edit3 className="w-4 h-4 text-lime-600" />;
       case 2:
         return <Video className="w-4 h-4 text-lime-600" />;
       default:
-        return <Camera className="w-4 h-4 text-lime-600" />;
+        return <Sparkles className="w-4 h-4 text-lime-600" />;
     }
   };
 
   return (
     <>
-      <header className="mx-4 rounded-2xl border border-white/20 bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/60 sticky top-4 z-50 shadow-lg">
-        <div className="container mx-auto px-6 py-4">
+      <header 
+        className={`mx-4 rounded-2xl border transition-all duration-300 sticky top-4 z-50 ${
+          scrolled 
+            ? 'bg-white/95 backdrop-blur-md border-slate-200 shadow-xl' 
+            : 'bg-white/80 backdrop-blur-md border-white/20 shadow-lg'
+        }`}
+      >
+        <div className="container mx-auto px-6 py-3">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 bg-gradient-to-r from-lime-400 to-lime-500 rounded-xl flex items-center justify-center shadow-lg">
+            <Link href="/" className="flex items-center space-x-3 group">
+              <div className="w-9 h-9 bg-gradient-to-r from-lime-500 to-green-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
                 <span className="text-white font-bold text-lg">S</span>
               </div>
-              <span className="text-2xl font-bold text-gray-900 tracking-tight">SnapFit</span>
-            </div>
+              <span className="text-2xl font-bold text-slate-900 tracking-tight">SnapFit</span>
+            </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
-              <Link href="#home" className="text-gray-700 hover:text-gray-900 transition-colors font-medium">
+              <Link 
+                href="#home" 
+                className="text-slate-700 hover:text-slate-900 transition-colors font-medium py-2 relative group"
+              >
                 Home
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-lime-500 transition-all duration-300 group-hover:w-full"></span>
               </Link>
-              <div className="relative">
+              
+              <div className="relative" ref={dropdownRef}>
                 <Button 
                   variant="ghost" 
-                  className="flex items-center text-gray-700 hover:text-gray-900 transition-colors text-md font-medium"
+                  className="flex items-center text-slate-700 hover:text-slate-900 transition-colors text-md font-medium py-2 group"
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
-                  onClick={toggleTools}
                 >
-                  Tools
-                  <ChevronDown className={`w-4 h-4 ml-1 transition-transform ${isToolsOpen ? 'rotate-180' : ''}`} />
+                  <Sparkles className="w-4 h-4 mr-2 text-lime-500" />
+                  AI Tools
+                  <ChevronDown className={`w-4 h-4 ml-1 transition-transform duration-200 ${isToolsOpen ? 'rotate-180' : ''}`} />
                 </Button>
                 
                 {/* Desktop Mega Dropdown Menu */}
                 {isToolsOpen && (
                   <div 
-                    className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[900px] bg-white/95 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl p-6 z-50"
+                    className="absolute top-full left-0 mt-2 w-[800px] bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-2xl p-6 z-50 animate-in fade-in-0 zoom-in-95"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                   >
-                    <div className="grid grid-cols-3 gap-8">
+                    <div className="grid grid-cols-3 gap-6">
                       {toolsCategories.map((category, categoryIndex) => (
                         <div key={categoryIndex} className="space-y-4">
-                          <div className="flex items-center space-x-2 pb-2 border-b border-gray-100">
-                            <div className="w-6 h-6 bg-lime-100 rounded-lg flex items-center justify-center">
+                          <div className="flex items-center space-x-3 pb-3 border-b border-slate-100">
+                            <div className="w-10 h-10 bg-lime-100 rounded-xl flex items-center justify-center">
                               {getIconForCategory(categoryIndex)}
                             </div>
-                            <h3 className="font-semibold text-gray-900 text-sm">{category.title}</h3>
+                            <div>
+                              <h3 className="font-semibold text-slate-900 text-sm">{category.title}</h3>
+                              <p className="text-slate-500 text-xs">{category.description}</p>
+                            </div>
                           </div>
                           <div className="space-y-3">
                             {category.tools.map((tool, toolIndex) => (
                               <Link 
                                 key={toolIndex}
-                                href={`/tools/${tool.name.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '')}`}
-                                className="block rounded-xl hover:bg-lime-50 transition-colors group overflow-hidden"
+                                href={tool.comingSoon ? '#' : `/tools/${tool.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                className={`block rounded-xl p-3 transition-all duration-200 group overflow-hidden ${
+                                  tool.comingSoon 
+                                    ? 'opacity-60 cursor-not-allowed' 
+                                    : 'hover:bg-lime-50 hover:shadow-md hover:-translate-y-0.5'
+                                }`}
+                                onClick={(e) => tool.comingSoon && e.preventDefault()}
                               >
                                 <div className="relative">
-                                  <div className="relative w-full h-32 rounded-lg overflow-hidden group-hover:from-lime-100 group-hover:to-lime-200 transition-colors">
+                                  <div className="relative w-full h-24 rounded-lg overflow-hidden bg-slate-100">
                                     {tool.type === "image" && tool.image ? (
                                       <Image
                                         src={tool.image}
                                         alt={tool.name}
                                         fill
-                                        style={{borderRadius: '200rem'}}
-                                        className="object-contain"
+                                        className="object-cover transition-transform duration-300 group-hover:scale-105"
                                         sizes="(max-width: 768px) 100vw, 300px"
                                       />
                                     ) : tool.type === "video" && tool.video ? (
                                       <div className="relative w-full h-full">
                                         <video
-                                          className="w-full rounded-2xl h-full object-contain"
-                                          style={{borderRadius: '200rem'}}
+                                          className="w-full h-full object-cover"
                                           autoPlay
                                           muted
                                           loop
@@ -214,13 +265,20 @@ const Header = () => {
                                           preload="auto"
                                         >
                                           <source src={tool.video} type="video/mp4" />
-                                          Your browser does not support the video tag.
                                         </video>
                                       </div>
                                     ) : null}
                                     
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end">
-                                      <div className="w-full p-3 bg-gradient-to-t from-black/60 to-transparent">
+                                    {tool.comingSoon && (
+                                      <div className="absolute inset-0 bg-slate-900/60 flex items-center justify-center">
+                                        <span className="text-white text-xs font-medium bg-slate-800 px-2 py-1 rounded-full">
+                                          Coming Soon
+                                        </span>
+                                      </div>
+                                    )}
+                                    
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end">
+                                      <div className="w-full p-2">
                                         <h4 className="font-semibold text-white text-sm leading-tight">
                                           {tool.name}
                                         </h4>
@@ -228,10 +286,20 @@ const Header = () => {
                                     </div>
                                   </div>
                                   
-                                  <div className="p-3">
-                                    <h4 className="font-medium text-gray-900 text-sm text-center group-hover:text-lime-700 transition-colors">
-                                      {tool.name}
-                                    </h4>
+                                  <div className="mt-3">
+                                    <div className="flex items-center justify-between">
+                                      <h4 className="font-medium text-slate-900 text-sm group-hover:text-lime-700 transition-colors">
+                                        {tool.name}
+                                      </h4>
+                                      {tool.comingSoon ? (
+                                        <Zap className="w-3 h-3 text-slate-400" />
+                                      ) : (
+                                        <ChevronRight className="w-3 h-3 text-lime-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                      )}
+                                    </div>
+                                    <p className="text-slate-600 text-xs mt-1 line-clamp-2">
+                                      {tool.description}
+                                    </p>
                                   </div>
                                 </div>
                               </Link>
@@ -240,31 +308,52 @@ const Header = () => {
                         </div>
                       ))}
                     </div>
+                    
+                    {/* View All Tools CTA */}
+                    <div className="mt-6 pt-6 border-t border-slate-100 text-center">
+                      <Link 
+                        href="/tools" 
+                        className="inline-flex items-center text-sm font-medium text-lime-600 hover:text-lime-700 transition-colors"
+                        onClick={() => setIsToolsOpen(false)}
+                      >
+                        View all AI tools
+                        <ChevronRight className="w-4 h-4 ml-1" />
+                      </Link>
+                    </div>
                   </div>
                 )}
               </div>
               
-              <Link href="/pricing" className="text-gray-700 hover:text-gray-900 transition-colors font-medium">
+              <Link 
+                href="/pricing" 
+                className="text-slate-700 hover:text-slate-900 transition-colors font-medium py-2 relative group"
+              >
                 Pricing
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-lime-500 transition-all duration-300 group-hover:w-full"></span>
               </Link>
-              <Link href="/inspiration" className="text-gray-700 hover:text-gray-900 transition-colors font-medium">
+              <Link 
+                href="/inspiration" 
+                className="text-slate-700 hover:text-slate-900 transition-colors font-medium py-2 relative group"
+              >
                 Inspiration
-              </Link>
-              <Link href="/contact" className="text-gray-700 hover:text-gray-900 transition-colors font-medium">
-                Contact
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-lime-500 transition-all duration-300 group-hover:w-full"></span>
               </Link>
             </nav>
 
             {/* Desktop Right side */}
-            <div className="hidden md:flex items-center space-x-4">
-              <Button className="bg-black hover:bg-gray-800 text-white px-6 py-2 rounded-lg font-medium transition-colors shadow-lg">
-                LOG IN / SIGN UP
+            <div className="hidden md:flex items-center space-x-3">
+            
+              <Button 
+              className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl"
+                asChild
+              >
+                <Link href="/signup">LOGIN / SIGNUP</Link>
               </Button>
             </div>
 
             {/* Mobile menu button */}
             <button 
-              className="md:hidden text-gray-700 hover:text-gray-900 transition-colors"
+              className="md:hidden text-slate-700 hover:text-slate-900 transition-colors p-2 rounded-lg hover:bg-slate-100"
               onClick={toggleMobileMenu}
               aria-label="Toggle mobile menu"
             >
@@ -280,7 +369,7 @@ const Header = () => {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
+        <div className="fixed inset-0 z-50 md:hidden animate-in fade-in-0">
           {/* Backdrop */}
           <div 
             className="fixed inset-0 bg-black/50 backdrop-blur-sm"
@@ -288,63 +377,84 @@ const Header = () => {
           />
           
           {/* Mobile Menu Panel */}
-          <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white/95 backdrop-blur-md shadow-2xl overflow-y-auto">
+          <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white/95 backdrop-blur-md shadow-2xl overflow-y-auto animate-in slide-in-from-right-0 duration-300">
             {/* Mobile Menu Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-lime-400 to-lime-500 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-r from-lime-500 to-green-500 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold">S</span>
                 </div>
-                <span className="text-xl font-bold text-gray-900">SnapFit</span>
+                <span className="text-xl font-bold text-slate-900">SnapFit</span>
               </div>
               <button 
                 onClick={closeMobileMenu}
-                className="text-gray-500 hover:text-gray-700 transition-colors"
+                className="text-slate-500 hover:text-slate-700 transition-colors p-2 rounded-lg hover:bg-slate-100"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
             {/* Mobile Menu Items */}
-            <div className="px-6 py-4 space-y-4">
+            <div className="px-6 py-4 space-y-1">
               <Link 
                 href="#home" 
-                className="block py-3 text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                className="flex items-center py-4 text-slate-700 hover:text-slate-900 font-medium transition-colors border-b border-slate-100"
                 onClick={closeMobileMenu}
               >
                 Home
               </Link>
 
               {/* Mobile Tools Menu */}
-              <div className="border-t border-gray-100 pt-4">
+              <div className="border-b border-slate-100">
                 <button
                   onClick={toggleMobileTools}
-                  className="flex items-center justify-between w-full py-3 text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                  className="flex items-center justify-between w-full py-4 text-slate-700 hover:text-slate-900 font-medium transition-colors"
                 >
-                  <span>Tools</span>
-                  <ChevronRight className={`w-4 h-4 transition-transform ${isMobileToolsOpen ? 'rotate-90' : ''}`} />
+                  <div className="flex items-center">
+                    <Sparkles className="w-4 h-4 mr-3 text-lime-500" />
+                    <span>AI Tools</span>
+                  </div>
+                  <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${isMobileToolsOpen ? 'rotate-90' : ''}`} />
                 </button>
 
                 {/* Mobile Tools Submenu */}
                 {isMobileToolsOpen && (
-                  <div className="ml-4 mt-2 space-y-4">
+                  <div className="ml-7 mb-4 space-y-4 animate-in fade-in-0">
                     {toolsCategories.map((category, categoryIndex) => (
-                      <div key={categoryIndex} className="space-y-2">
-                        <div className="flex items-center space-x-2 py-2 border-b border-gray-50">
-                          <div className="w-5 h-5 bg-lime-100 rounded-md flex items-center justify-center">
+                      <div key={categoryIndex} className="space-y-3">
+                        <div className="flex items-center space-x-2 pt-4">
+                          <div className="w-6 h-6 bg-lime-100 rounded-md flex items-center justify-center">
                             {getIconForCategory(categoryIndex)}
                           </div>
-                          <h3 className="font-semibold text-gray-900 text-sm">{category.title}</h3>
+                          <div>
+                            <h3 className="font-semibold text-slate-900 text-sm">{category.title}</h3>
+                            <p className="text-slate-500 text-xs">{category.description}</p>
+                          </div>
                         </div>
-                        <div className="space-y-2 ml-6">
+                        <div className="space-y-2 ml-2">
                           {category.tools.map((tool, toolIndex) => (
                             <Link 
                               key={toolIndex}
-                              href={`/tools/${tool.name.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '')}`}
-                              className="block py-2 text-sm text-gray-600 hover:text-lime-600 transition-colors"
-                              onClick={closeMobileMenu}
+                              href={tool.comingSoon ? '#' : `/tools/${tool.name.toLowerCase().replace(/\s+/g, '-')}`}
+                              className={`flex items-center justify-between py-2 text-sm transition-colors ${
+                                tool.comingSoon 
+                                  ? 'text-slate-400 cursor-not-allowed' 
+                                  : 'text-slate-600 hover:text-lime-600'
+                              }`}
+                              onClick={(e) => {
+                                if (tool.comingSoon) {
+                                  e.preventDefault();
+                                } else {
+                                  closeMobileMenu();
+                                }
+                              }}
                             >
-                              {tool.name}
+                              <span>{tool.name}</span>
+                              {tool.comingSoon && (
+                                <span className="text-xs bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full">
+                                  Soon
+                                </span>
+                              )}
                             </Link>
                           ))}
                         </div>
@@ -356,34 +466,37 @@ const Header = () => {
 
               <Link 
                 href="/pricing" 
-                className="block py-3 text-gray-700 hover:text-gray-900 font-medium transition-colors border-t border-gray-100 pt-4"
+                className="flex items-center py-4 text-slate-700 hover:text-slate-900 font-medium transition-colors border-b border-slate-100"
                 onClick={closeMobileMenu}
               >
                 Pricing
               </Link>
               <Link 
                 href="/inspiration" 
-                className="block py-3 text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                className="flex items-center py-4 text-slate-700 hover:text-slate-900 font-medium transition-colors border-b border-slate-100"
                 onClick={closeMobileMenu}
               >
                 Inspiration
               </Link>
-              <Link 
-                href="/contact" 
-                className="block py-3 text-gray-700 hover:text-gray-900 font-medium transition-colors"
-                onClick={closeMobileMenu}
-              >
-                Contact
-              </Link>
 
-              {/* Mobile Login Button */}
-              <div className="pt-6 border-t border-gray-100">
+              {/* Mobile Auth Buttons */}
+              <div className="pt-6 space-y-3">
                 <Button 
-                  className="w-full bg-black hover:bg-gray-800 text-white py-3 rounded-lg font-medium transition-colors shadow-lg"
-                  onClick={closeMobileMenu}
+                  variant="outline"
+              className="bg-transparent border border-slate-900 text-slate-900 hover:bg-slate-50 px-8 py-4 rounded-full font-semibold transition-colors duration-300 flex items-center justify-center"
+                  asChild
                 >
-                  LOG IN / SIGN UP
+                  <Link href="/login" onClick={closeMobileMenu}>
+                    Log in
+                  </Link>
                 </Button>
+                <button 
+              className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 w-full rounded-full font-semibold transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl"
+                >
+                  <Link href="/signup" onClick={closeMobileMenu}>
+                    Get Started Free
+                  </Link>
+                </button>
               </div>
             </div>
           </div>

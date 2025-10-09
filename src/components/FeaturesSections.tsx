@@ -1,5 +1,7 @@
 // src/components/FeaturesSection.tsx
-import React from 'react';
+"use client";
+
+import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
 
 const FeaturesSection = () => {
@@ -22,7 +24,7 @@ const FeaturesSection = () => {
     {
       title: "Bulk API / Catalog Integration",
       description: "For large clients: batch, sync, auto-generate.",
-      image: "/images/tools/product-to-video.mp4"
+      video: "/images/tools/product-to-video.mp4" // Fixed: changed from image to video
     },
     {
       title: "Image Enhancements / Clean-up Tools",
@@ -60,72 +62,143 @@ const FeaturesSection = () => {
         {/* Features Grid - Matching HeroSection Card Style */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <div
+            <FeatureCard 
               key={feature.title}
-              className="group bg-white rounded-2xl p-6 shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300 h-full flex flex-col"
-            >
-              {/* Feature Image/Video Container */}
-              <div className="relative bg-gradient-to-br from-slate-100 to-lime-100/50 rounded-xl aspect-[4/3] overflow-hidden border border-slate-200 group-hover:border-lime-300 transition-colors mb-6">
-                <div className="absolute inset-4 bg-white rounded-lg shadow-sm overflow-hidden">
-                  {feature.video ? (
-                    <video
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    >
-                      <source src={feature.video} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <Image
-                      src={feature.image || ""}
-                      alt={feature.title}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  )}
-                </div>
-              </div>
-
-              {/* Feature Content */}
-              <div className="flex-1 flex flex-col">
-                <div className="flex items-start space-x-3 mb-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-lime-100 text-lime-700 rounded-full flex items-center justify-center text-sm font-bold">
-                    {index + 1}
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-lime-700 transition-colors duration-200 leading-tight">
-                    {feature.title}
-                  </h3>
-                </div>
-                
-                <p className="text-slate-700 leading-relaxed mb-4 flex-1">
-                  {feature.description}
-                </p>
-                
-                {/* Action Button - Matching HeroSection Style */}
-                <div className="pt-4 border-t border-slate-100">
-                  <button className="text-lime-600 hover:text-lime-700 font-medium text-sm flex items-center gap-2 group/btn transition-colors duration-200">
-                    Learn More
-                    <svg 
-                      className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform duration-200" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
+              feature={feature}
+              index={index}
+            />
           ))}
         </div>
 
-     
+        {/* Bottom CTA - Matching HeroSection */}
+        <div className="text-center mt-12">
+          <p className="text-slate-600 mb-6">Ready to explore all features?</p>
+          <button className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-full font-medium transition-colors inline-flex items-center shadow-md hover:shadow-lg">
+            Start with 5 Free Images
+            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       </div>
     </section>
+  );
+};
+
+// Separate component for better video handling
+const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Restart video when it ends to create seamless loop
+    const handleEnded = () => {
+      video.currentTime = 0;
+      video.play().catch(() => {
+        // Silent catch for autoplay restrictions
+      });
+    };
+
+    video.addEventListener('ended', handleEnded);
+
+    return () => {
+      video.removeEventListener('ended', handleEnded);
+    };
+  }, []);
+
+  // Handle video play on hover
+  const handleMouseEnter = () => {
+    if (videoRef.current && feature.video) {
+      videoRef.current.play().catch(() => {
+        // Silent catch for autoplay restrictions
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (videoRef.current && feature.video) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  };
+
+  return (
+    <div
+      className="group bg-white rounded-2xl p-6 shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300 h-full flex flex-col"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Feature Image/Video Container */}
+      <div className="relative bg-gradient-to-br from-slate-100 to-lime-100/50 rounded-xl aspect-[4/3] overflow-hidden border border-slate-200 group-hover:border-lime-300 transition-colors mb-6">
+        <div className="absolute inset-0 bg-white rounded-lg overflow-hidden">
+          {feature.video ? (
+            <div className="relative w-full h-full">
+              <video
+                ref={videoRef}
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                poster={feature.poster}
+              >
+                <source src={feature.video} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              {/* Fallback play button for mobile */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="bg-black/50 rounded-full p-3 backdrop-blur-sm">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <Image
+              src={feature.image || ""}
+              alt={feature.title}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Feature Content */}
+      <div className="flex-1 flex flex-col">
+        <div className="flex items-start space-x-3 mb-4">
+          <div className="flex-shrink-0 w-8 h-8 bg-lime-100 text-lime-700 rounded-full flex items-center justify-center text-sm font-bold">
+            {index + 1}
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 group-hover:text-lime-700 transition-colors duration-200 leading-tight">
+            {feature.title}
+          </h3>
+        </div>
+        
+        <p className="text-slate-700 leading-relaxed mb-4 flex-1">
+          {feature.description}
+        </p>
+        
+        {/* Action Button - Matching HeroSection Style */}
+        <div className="pt-4 border-t border-slate-100">
+          <button className="text-lime-600 hover:text-lime-700 font-medium text-sm flex items-center gap-2 group/btn transition-colors duration-200">
+            Learn More
+            <svg 
+              className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform duration-200" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

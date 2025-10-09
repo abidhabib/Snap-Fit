@@ -43,89 +43,95 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-w-6xl mx-auto">
-          
-          {/* Step 1: Upload Your Product */}
-          <div className="group">
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300 h-full">
-              <div className="text-center mb-6">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-lime-100 text-lime-700 rounded-full font-bold text-lg mb-4">
-                  1
-                </div>
-                <h3 className="text-2xl font-bold mb-4 text-slate-900">Upload Your Product</h3>
-                <p className="text-slate-700 leading-relaxed">
-                  Flat-lay, mannequin, or packshot - SnapFit accepts all.
-                </p>
-              </div>
-              <div className="relative bg-gradient-to-br from-slate-100 to-lime-100/50 rounded-xl aspect-[4/5] overflow-hidden border border-slate-200 group-hover:border-lime-300 transition-colors">
-                <div className="absolute inset-4 bg-white rounded-lg shadow-sm overflow-hidden">
-                  <Image
-                    src="/images/upload-image.png"
-                    alt="Upload your product"
-                    fill
-                    className="object-contain p-6 transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* Steps Grid */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-w-6xl mx-auto">
+  
+  {/* Step 1: Upload Your Product */}
+  <div className="group">
+    <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+      <div className="text-center mb-6 flex-1">
+        <div className="inline-flex items-center justify-center w-12 h-12 bg-lime-100 text-lime-700 rounded-full font-bold text-lg mb-4">
+          1
+        </div>
+        <h3 className="text-2xl font-bold mb-4 text-slate-900">Upload Your Product</h3>
+        <p className="text-slate-700 leading-relaxed">
+          Flat-lay, mannequin, or packshot - SnapFit accepts all.
+        </p>
+      </div>
+      <div className="relative bg-gradient-to-br from-slate-100 to-lime-100/50 rounded-xl aspect-[3/4] overflow-hidden border border-slate-200 group-hover:border-lime-300 transition-colors">
+        <div 
+>
+          <Image
+            src="/images/upload-image.png"
+            alt="Upload your product"
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
 
-          {/* Step 2: Customize the Shoot */}
-          <div className="group">
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300 h-full">
-              <div className="text-center mb-6">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-lime-100 text-lime-700 rounded-full font-bold text-lg mb-4">
-                  2
-                </div>
-                <h3 className="text-2xl font-bold mb-4 text-slate-900">Customize the Shoot</h3>
-                <p className="text-slate-700 leading-relaxed">
-                  Pick your model, pose, and background - or let AI auto-style it.
-                </p>
-              </div>
-              <div className="relative bg-gradient-to-br from-slate-100 to-lime-100/50 rounded-xl aspect-[4/5] overflow-hidden border border-slate-200 group-hover:border-lime-300 transition-colors">
-                <div className="absolute inset-4 bg-white rounded-lg shadow-sm overflow-hidden">
-                  <Image 
-                    src="/images/image-on-model.png" 
-                    alt="Customize the photoshoot"
-                    fill
-                    className="object-contain p-6 transition-transform duration-300 group-hover:scale-105" 
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+  {/* Step 2: Customize the Shoot */}
+  <div className="group">
+    <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+      <div className="text-center mb-6 flex-1">
+        <div className="inline-flex items-center justify-center w-12 h-12 bg-lime-100 text-lime-700 rounded-full font-bold text-lg mb-4">
+          2
+        </div>
+        <h3 className="text-2xl font-bold mb-4 text-slate-900">Customize the Shoot</h3>
+        <p className="text-slate-700 leading-relaxed">
+          Pick your model, pose, and background - or let AI auto-style it.
+        </p>
+      </div>
+      <div className="relative bg-gradient-to-br from-slate-100 to-lime-100/50 rounded-xl aspect-[3/4] overflow-hidden border border-slate-200 group-hover:border-lime-300 transition-colors">
+        <div
+         >
+          <Image 
+            src="/images/image-on-model.png" 
+            alt="Customize the photoshoot"
+            fill
+            className="object-fill  transition-transform duration-300 group-hover:scale-105" 
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
 
-          {/* Step 3: Generate & Download */}
-          <div className="group">
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300 h-full">
-              <div className="text-center mb-6">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-lime-100 text-lime-700 rounded-full font-bold text-lg mb-4">
-                  3
-                </div>
-                <h3 className="text-2xl font-bold mb-4 text-slate-900">Generate & Download</h3>
-                <p className="text-slate-700 leading-relaxed">
-                  Get studio-quality images and videos in seconds. Perfectly sized for e-commerce platforms.
-                </p>
-              </div>
-              <div className="relative bg-gradient-to-br from-slate-100 to-lime-100/50 rounded-xl aspect-[4/5] overflow-hidden border border-slate-200 group-hover:border-lime-300 transition-colors">
-                <div className="absolute inset-4 bg-white rounded-lg shadow-sm overflow-hidden">
-                  <video
-                    muted
-                    autoPlay
-                    loop
-                    playsInline
-                    className="w-full h-full object-contain p-4"
-                  >
-                    <source src="/gifs/Apparel.mp4" type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              </div>
-            </div>
+  {/* Step 3: Generate & Download */}
+  <div className="group">
+    <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+      <div className="text-center mb-6 flex-1">
+        <div className="inline-flex items-center justify-center w-12 h-12 bg-lime-100 text-lime-700 rounded-full font-bold text-lg mb-4">
+          3
+        </div>
+        <h3 className="text-2xl font-bold mb-4 text-slate-900">Generate & Download</h3>
+        <p className="text-slate-700 leading-relaxed">
+          Get studio-quality images and videos in seconds. Perfectly sized for e-commerce platforms.
+        </p>
+      </div>
+      <div className="relative bg-gradient-to-br from-slate-100 to-lime-100/50 rounded-xl aspect-[3/4] overflow-hidden border border-slate-200 group-hover:border-lime-300 transition-colors">
+        <div 
+        >
+          <div className="relative w-full h-full">
+            <video
+              muted
+              autoPlay
+              loop
+              playsInline
+              className="w-full h-full object-cove transition-transform duration-300 group-hover:scale-105"
+            >
+              <source src="/gifs/Apparel.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
         </div>
-
+      </div>
+    </div>
+  </div>
+</div>
         {/* Step Progress Indicator */}
         <div className="flex justify-center items-center space-x-4 mb-12">
           <div className="flex items-center space-x-2">
