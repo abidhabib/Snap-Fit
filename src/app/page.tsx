@@ -7,6 +7,10 @@ import FeaturesSections from "@/components/FeaturesSections";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import CTASection from "@/components/CTASection";
+import TrustedBrandsSection from "@/components/TrustedBrandsSection";
+import BeforeAfterShowcase from "@/components/BeforeAfterShowcase";
+import IntegrationsSection from "@/components/IntegrationsSection";
+import CTABanner from "@/components/CTABanner";
 
 export default function Home() {
   return (
@@ -15,10 +19,15 @@ export default function Home() {
       <div className="relative z-10">
         <Header />
         <HeroSection />
+        <TrustedBrandsSection/>
+                <FeaturesSections />
+                              <BeforeAfterShowcase />
+<IntegrationsSection/>
+<CTABanner/>
         <ResultsSection />
+
         <InspirationGallery />
         <ContentCreationSection />
-        <FeaturesSections />
         <CTASection/>
         <FAQSection />
     

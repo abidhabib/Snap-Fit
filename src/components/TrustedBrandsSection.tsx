@@ -1,21 +1,59 @@
+// src/components/TrustedBrandsSection.tsx
+
 const TrustedBrandsSection = () => {
+  const brands = [
+    {
+      name: 'DigiKhata',
+      logo: 'https://digikhata.pk/images/home/cashbook.png',
+    },
+    {
+      name: 'BizB.Store',
+      logo: 'https://i.ibb.co/dJmBv4gp/Screenshot-from-2025-10-09-21-41-04.png',
+    },
+    {
+      name: 'Ginkgo',
+      logo: 'https://img.freepik.com/premium-vector/ginkgo-logo-desing-icon-vector_687341-104.jpg',
+    },
+  ];
+
   return (
     <section className="py-12 bg-background">
       <div className="container mx-auto px-4">
-        <h3 className="text-center text-lg font-medium text-foreground mb-8">
-          Trusted by thousands of fashion brands
-        </h3>
-        
-        <div className="flex justify-center items-center space-x-8 md:space-x-12 opacity-60">
-          {/* Brand logos */}
-          <div className="text-2xl font-bold text-muted-foreground">WooCommerce</div>
-          <div className="text-2xl font-bold text-muted-foreground">amazon</div>
-          <div className="text-2xl font-bold text-muted-foreground italic">Instagram</div>
-          <div className="text-2xl font-bold text-muted-foreground">TikTok</div>
-          <div className="text-2xl font-bold text-muted-foreground italic">Etsy</div>
-          <div className="text-2xl font-bold text-muted-foreground">Walmart</div>
-          <div className="text-2xl font-bold text-muted-foreground">shopify</div>
-          <div className="text-2xl font-bold text-muted-foreground">ebay</div>
+        <p 
+         className="text-center text-4xl font-extrabold italic bg-gradient-to-r from-slate-600 to-lime-600 bg-clip-text text-transparent  mb-6">
+          Trusted by Growing E-commerce Brands & Marketplaces.
+        </p>
+
+        <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-8">
+          {brands.map((brand, index) => (
+            <div
+              key={index}
+              className="flex flex-col items-center group"
+            >
+              <div className="w-16 h-16 rounded-xl bg-white/50 backdrop-blur-sm border border-border flex items-center justify-center overflow-hidden shadow-sm transition-transform group-hover:scale-105">
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  width={64}
+                  height={64}
+                  className="object-contain w-full h-full p-1"
+                  loading="lazy"
+                />
+              </div>
+              <span className="text-xs font-medium text-muted-foreground mt-3 text-center px-2">
+                {brand.name}
+              </span>
+            </div>
+          ))}
+          {/* Early Adopters Card */}
+          <div className="flex flex-col items-center">
+            <div className="w-16 h-16 rounded-xl bg-muted/30 border border-border flex items-center justify-center shadow-sm">
+              <span className="text-muted-foreground font-bold text-lg">+100</span>
+            </div>
+            <span className="text-xs font-medium text-muted-foreground mt-3 text-center px-2">
+              Early Adopters
+            </span>
+          </div>
         </div>
       </div>
     </section>

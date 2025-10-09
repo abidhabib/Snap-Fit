@@ -3,175 +3,297 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
-import { Plus, Minus } from "lucide-react";
-
-interface Plan {
-  id: string;
-  name: string;
-  price: number;
-  credits: number;
-  description: string;
-  features: string[];
-  buttonText: string;
-  popular: boolean;
-}
-
-interface FAQ {
-  question: string;
-  answer: string;
-}
+import { Check, X, Star, Zap, Clock, Shield, Users, Globe, TrendingDown } from "lucide-react";
 
 const PricingSection = () => {
-  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('monthly');
 
-  const snapfitPlans: Plan[] = [
+  const plans = [
     {
       id: "freemium",
       name: "Freemium",
       price: 0,
+      originalPrice: 0,
       credits: 6,
-      description: "Try SnapFit with 3 free images",
+      description: "Perfect for trying out SnapFit",
       features: [
-        "3 free product images",
-        "Basic image processing",
-        "Limited-time access",
+        { text: "3 product images", included: true },
+        { text: "Basic image processing", included: true },
+        { text: "Standard quality exports", included: true },
+        { text: "Commercial usage rights", included: false },
+        { text: "Priority support", included: false },
+        { text: "HD quality exports", included: false },
+        { text: "Bulk operations", included: false },
+        { text: "API access", included: false }
       ],
       buttonText: "Get Started Free",
       popular: false
     },
     {
       id: "basic",
-      name: "Basic Plan",
+      name: "Basic",
       price: 5000,
+      originalPrice: 6000,
       credits: 40,
-      description: "Perfect for small businesses",
+      description: "Great for small businesses",
       features: [
-        "20 product images", 
-        "Basic support",
-        "Standard quality exports",
-        "Commercial usage rights"
+        { text: "20 product images", included: true },
+        { text: "Basic image processing", included: true },
+        { text: "Standard quality exports", included: true },
+        { text: "Commercial usage rights", included: true },
+        { text: "Priority support", included: false },
+        { text: "HD quality exports", included: false },
+        { text: "Bulk operations", included: false },
+        { text: "API access", included: false }
       ],
       buttonText: "Choose Basic",
       popular: false
     },
     {
       id: "standard",
-      name: "Standard Plan",
+      name: "Standard",
       price: 12500,
+      originalPrice: 15000,
       credits: 100,
-      description: "Ideal for growing businesses",
+      description: "Ideal for growing brands",
       features: [
-        "50 product images", 
-        "Priority support", 
-        "Premium features",
-        "HD quality exports",
-        "Advanced processing",
-        "Bulk operations"
+        { text: "50 product images", included: true },
+        { text: "Basic image processing", included: true },
+        { text: "Standard quality exports", included: true },
+        { text: "Commercial usage rights", included: true },
+        { text: "Priority support", included: true },
+        { text: "HD quality exports", included: true },
+        { text: "Bulk operations", included: true },
+        { text: "API access", included: false }
       ],
       buttonText: "Choose Standard",
       popular: true
+    },
+    {
+      id: "premium",
+      name: "Premium",
+      price: 25000,
+      originalPrice: 30000,
+      credits: 250,
+      description: "For enterprises & agencies",
+      features: [
+        { text: "125 product images", included: true },
+        { text: "Basic image processing", included: true },
+        { text: "Standard quality exports", included: true },
+        { text: "Commercial usage rights", included: true },
+        { text: "Priority support", included: true },
+        { text: "HD quality exports", included: true },
+        { text: "Bulk operations", included: true },
+        { text: "API access", included: true }
+      ],
+      buttonText: "Choose Premium",
+      popular: false
     }
   ];
 
-  const faqs: FAQ[] = [
+  const comparisonData = [
     {
-      question: "How do SnapFit credits work?",
-      answer: "Credits are used to process your product images with AI background replacement. Each image processing consumes credits based on the complexity and size of the image."
+      feature: "Cost per Image",
+      snapfit: {
+        value: "From Rs. 100 per image",
+        icon: <TrendingDown className="w-4 h-4 text-green-600" />,
+        highlight: true
+      },
+      traditional: {
+        value: "Rs. 1,000–5,000 per image",
+        icon: <X className="w-4 h-4 text-red-500" />,
+        highlight: false
+      },
+      competitors: {
+        value: "Rs. 200–560 (USD pricing)",
+        icon: <X className="w-4 h-4 text-red-500" />,
+        highlight: false
+      }
     },
     {
-      question: "Can I upgrade my plan anytime?",
-      answer: "Yes, you can upgrade your plan at any time. Your remaining credits will be preserved and additional credits from the new plan will be added to your account."
+      feature: "Turnaround Time",
+      snapfit: {
+        value: "Minutes / Hours",
+        icon: <Zap className="w-4 h-4 text-green-600" />,
+        highlight: true
+      },
+      traditional: {
+        value: "Days / Weeks",
+        icon: <X className="w-4 h-4 text-red-500" />,
+        highlight: false
+      },
+      competitors: {
+        value: "1–2 days average",
+        icon: <Clock className="w-4 h-4 text-yellow-500" />,
+        highlight: false
+      }
     },
     {
-      question: "What happens after I use all my credits?",
-      answer: "Once you've used all your credits, you can purchase a new plan to continue using SnapFit. The Freemium plan resets periodically for continued free access."
+      feature: "Licensing & Royalties",
+      snapfit: {
+        value: "All-inclusive, no hidden fees",
+        icon: <Shield className="w-4 h-4 text-green-600" />,
+        highlight: true
+      },
+      traditional: {
+        value: "Model & studio royalties extra",
+        icon: <X className="w-4 h-4 text-red-500" />,
+        highlight: false
+      },
+      competitors: {
+        value: "Usage limits / hidden fees",
+        icon: <X className="w-4 h-4 text-red-500" />,
+        highlight: false
+      }
     },
     {
-      question: "Do you offer refunds?",
-      answer: "We offer a satisfaction guarantee. If you're not happy with your purchase within 7 days and haven't used more than 20% of your credits, we'll provide a full refund."
+      feature: "Scale & API Integration",
+      snapfit: {
+        value: "Bulk-ready, API support",
+        icon: <Check className="w-4 h-4 text-green-600" />,
+        highlight: true
+      },
+      traditional: {
+        value: "Manual only",
+        icon: <X className="w-4 h-4 text-red-500" />,
+        highlight: false
+      },
+      competitors: {
+        value: "Limited or custom-only",
+        icon: <X className="w-4 h-4 text-red-500" />,
+        highlight: false
+      }
+    },
+    {
+      feature: "Diversity & Model Choice",
+      snapfit: {
+        value: "Extensive: local + global styles",
+        icon: <Users className="w-4 h-4 text-green-600" />,
+        highlight: true
+      },
+      traditional: {
+        value: "Limited availability",
+        icon: <X className="w-4 h-4 text-red-500" />,
+        highlight: false
+      },
+      competitors: {
+        value: "Often western-only models",
+        icon: <X className="w-4 h-4 text-red-500" />,
+        highlight: false
+      }
+    },
+    {
+      feature: "Local Advantage",
+      snapfit: {
+        value: "PKR pricing, local support",
+        icon: <Globe className="w-4 h-4 text-green-600" />,
+        highlight: true
+      },
+      traditional: {
+        value: "Expensive setups",
+        icon: <X className="w-4 h-4 text-red-500" />,
+        highlight: false
+      },
+      competitors: {
+        value: "USD-only, no local payments",
+        icon: <X className="w-4 h-4 text-red-500" />,
+        highlight: false
+      }
     }
   ];
 
- 
-
-  const toggleFAQ = (index: number) => {
-    setOpenFAQ(openFAQ === index ? null : index);
+  const handlePlanSelect = (planId: string) => {
+    setSelectedPlan(planId);
+    // Scroll to comparison table
+    document.getElementById('comparison-table')?.scrollIntoView({ 
+      behavior: 'smooth' 
+    });
   };
 
   return (
-    <section id="pricing" className="py-16 bg-gradient-to-br from-lime-50 to-green-50 dark:from-lime-950/20 dark:to-green-950/20">
+    <section id="pricing" className="py-16 bg-gradient-to-br from-slate-50 to-lime-50/30">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="text-lime-600 dark:text-lime-400">SnapFit</span> Pricing Plans
+          <div className="mb-4">
+            <span className="inline-block bg-lime-100 text-lime-800 px-4 py-2 rounded-full text-sm font-medium">
+              Transparent Pricing
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-slate-900">
+            Simple, Honest{' '}
+            <span className="bg-gradient-to-r from-slate-600 to-lime-600 bg-clip-text text-transparent">
+              Pricing
+            </span>
           </h2>
-          <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-            Transform your product images with AI-powered background replacement. 
-            Choose the perfect plan for your business needs.
+          <p className="text-lg text-slate-700 max-w-2xl mx-auto">
+            No hidden fees. No surprise charges. Just straightforward pricing that scales with your business.
           </p>
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 max-w-5xl mx-auto">
-          {snapfitPlans.map((plan) => (
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-16 max-w-7xl mx-auto">
+          {plans.map((plan) => (
             <Card
               key={plan.id}
-              className={`relative p-6 h-fit bg-white dark:bg-slate-900 border-2 transition-all duration-300 hover:shadow-xl ${
+              className={`relative p-6 h-fit bg-white border-2 transition-all duration-300 hover:shadow-lg ${
                 plan.popular
-                  ? "border-lime-500 shadow-lg scale-105 shadow-lime-500/25"
-                  : "border-slate-200 dark:border-slate-700 hover:border-lime-300 dark:hover:border-lime-600"
-              }`}
+                  ? "border-lime-500 shadow-lg scale-105"
+                  : "border-slate-200 hover:border-lime-300"
+              } ${selectedPlan === plan.id ? 'ring-2 ring-lime-500 ring-opacity-50' : ''}`}
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-gradient-to-r from-lime-500 to-green-500 text-white px-4 py-1 rounded-full text-sm font-medium shadow-lg">
+                  <span className="bg-gradient-to-r from-lime-500 to-green-500 text-white px-4 py-1 rounded-full text-sm font-medium shadow-lg flex items-center gap-1">
+                    <Star className="w-3 h-3" />
                     Most Popular
                   </span>
                 </div>
               )}
 
               <div className="text-center mb-6">
-                <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">{plan.name}</h3>
+                <h3 className="text-xl font-bold mb-2 text-slate-900">{plan.name}</h3>
                 <div className="mb-2">
-                  <span className="text-3xl font-bold text-slate-900 dark:text-white">{plan.price === 0 ? "Free" : `₨${plan.price}`}</span>
-                  {plan.price > 0 && (
-                    <span className="text-slate-500 dark:text-slate-400 text-sm ml-1">one-time</span>
+                  <span className="text-3xl font-bold text-slate-900">
+                    {plan.price === 0 ? "Free" : `₨${plan.price.toLocaleString()}`}
+                  </span>
+                  {plan.price > 0 && plan.originalPrice > plan.price && (
+                    <span className="text-slate-500 line-through text-sm ml-2">
+                      ₨{plan.originalPrice.toLocaleString()}
+                    </span>
                   )}
                 </div>
-                <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">{plan.description}</p>
-                <div className="text-sm font-medium text-lime-600 dark:text-lime-400 bg-lime-100 dark:bg-lime-900/30 px-3 py-1 rounded-full inline-block">
-                  {plan.credits} credits included
+                <p className="text-sm text-slate-600 mb-2">{plan.description}</p>
+                <div className="text-sm font-medium text-lime-600 bg-lime-100 px-3 py-1 rounded-full inline-block">
+                  {plan.credits} credits
                 </div>
               </div>
 
               <Button
+                onClick={() => handlePlanSelect(plan.id)}
                 className={`w-full mb-6 font-medium transition-all duration-200 ${
                   plan.popular
-                    ? "bg-gradient-to-r from-lime-600 to-green-600 hover:from-lime-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl"
+                    ? "bg-gradient-to-r from-lime-600 to-green-600 hover:from-lime-700 hover:to-green-700 text-white shadow-lg"
                     : plan.price === 0
-                    ? "bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white dark:border-slate-600"
-                    : "bg-lime-500 hover:bg-lime-600 text-white shadow-md hover:shadow-lg"
-                }`}
+                    ? "bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300"
+                    : "bg-lime-500 hover:bg-lime-600 text-white"
+                } ${selectedPlan === plan.id ? 'ring-2 ring-lime-500 ring-offset-2' : ''}`}
               >
                 {plan.buttonText}
               </Button>
 
               <ul className="space-y-3">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-start space-x-2">
-                    <svg
-                      className="w-5 h-5 text-lime-500 mt-0.5 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-sm text-slate-700 dark:text-slate-200">{feature}</span>
+                {plan.features.map((feature, index) => (
+                  <li key={index} className="flex items-center space-x-3">
+                    {feature.included ? (
+                      <Check className="w-5 h-5 text-lime-500 flex-shrink-0" />
+                    ) : (
+                      <X className="w-5 h-5 text-slate-300 flex-shrink-0" />
+                    )}
+                    <span className={`text-sm ${feature.included ? 'text-slate-700' : 'text-slate-400'}`}>
+                      {feature.text}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -180,85 +302,119 @@ const PricingSection = () => {
         </div>
 
         {/* Comparison Table */}
-        <div className="mb-16">
-          <h3 className="text-2xl font-bold text-center mb-8 text-slate-900 dark:text-white">
-            <span className="text-lime-600 dark:text-lime-400">Compare</span> Plans
-          </h3>
+        <div id="comparison-table" className="mb-16">
+          <div className="text-center mb-8">
+            <h3 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900">
+              See Why Brands Choose{' '}
+              <span className="bg-gradient-to-r from-slate-600 to-lime-600 bg-clip-text text-transparent">
+                SnapFit
+              </span>
+            </h3>
+            <p className="text-lg text-slate-700 max-w-3xl mx-auto">
+              Compare how SnapFit outperforms traditional studios and international competitors
+            </p>
+          </div>
           
-          <div className="bg-white dark:bg-slate-900 rounded-lg overflow-hidden shadow-lg border border-slate-200 dark:border-slate-700 max-w-4xl mx-auto">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-lime-50 dark:bg-lime-950/50">
-                  <tr>
-                    <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Features</th>
-                    <th className="text-center p-4 font-semibold text-slate-900 dark:text-white">Freemium</th>
-                    <th className="text-center p-4 font-semibold text-slate-900 dark:text-white">Basic</th>
-                    <th className="text-center p-4 font-semibold text-slate-900 dark:text-white bg-lime-100 dark:bg-lime-900/30">Standard</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-                  <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td className="p-4 font-medium text-slate-900 dark:text-white">Product Images</td>
-                    <td className="p-4 text-center text-slate-600 dark:text-slate-300">3 images</td>
-                    <td className="p-4 text-center text-slate-600 dark:text-slate-300">20 images</td>
-                    <td className="p-4 text-center text-slate-600 dark:text-slate-300 bg-lime-50 dark:bg-lime-900/20">50 images</td>
-                  </tr>
-                  <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td className="p-4 font-medium text-slate-900 dark:text-white">Credits Included</td>
-                    <td className="p-4 text-center text-slate-600 dark:text-slate-300">6 credits</td>
-                    <td className="p-4 text-center text-slate-600 dark:text-slate-300">40 credits</td>
-                    <td className="p-4 text-center text-slate-600 dark:text-slate-300 bg-lime-50 dark:bg-lime-900/20">100 credits</td>
-                  </tr>
-                  <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td className="p-4 font-medium text-slate-900 dark:text-white">Support Level</td>
-                    <td className="p-4 text-center text-slate-600 dark:text-slate-300">Community</td>
-                    <td className="p-4 text-center text-slate-600 dark:text-slate-300">Basic Support</td>
-                    <td className="p-4 text-center text-slate-600 dark:text-slate-300 bg-lime-50 dark:bg-lime-900/20">Priority Support</td>
-                  </tr>
-             
-              
-                </tbody>
-              </table>
+          <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden max-w-6xl mx-auto">
+            {/* Table Header */}
+            <div className="grid grid-cols-4 gap-4 p-6 bg-gradient-to-r from-slate-50 to-lime-50/50 border-b border-slate-200">
+              <div className="text-lg font-semibold text-slate-900">Feature</div>
+              <div className="text-center">
+                <div className="bg-gradient-to-r from-lime-600 to-green-600 text-white px-4 py-3 rounded-xl shadow-lg">
+                  <div className="font-bold text-lg">SnapFit</div>
+                  <div className="text-sm opacity-90">Recommended</div>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="bg-slate-100 text-slate-700 px-4 py-3 rounded-xl border border-slate-300">
+                  <div className="font-bold text-lg">Traditional Studio</div>
+                  <div className="text-sm opacity-75">Local Options</div>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="bg-slate-100 text-slate-700 px-4 py-3 rounded-xl border border-slate-300">
+                  <div className="font-bold text-lg">Competitors</div>
+                  <div className="text-sm opacity-75">International</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Table Body */}
+            <div className="divide-y divide-slate-100">
+              {comparisonData.map((row, index) => (
+                <div 
+                  key={index} 
+                  className="grid grid-cols-4 gap-4 p-6 hover:bg-lime-50/30 transition-colors duration-200"
+                >
+                  <div className="flex items-center">
+                    <span className="text-lg font-medium text-slate-900">
+                      {row.feature}
+                    </span>
+                  </div>
+
+                  <div className={`text-center p-4 rounded-lg transition-all duration-200 ${
+                    row.snapfit.highlight 
+                      ? 'bg-green-50 border border-green-200 shadow-sm' 
+                      : 'bg-white'
+                  }`}>
+                    <div className="flex flex-col items-center gap-2">
+                      {row.snapfit.icon}
+                      <span className={`font-medium ${
+                        row.snapfit.highlight ? 'text-green-700' : 'text-slate-700'
+                      }`}>
+                        {row.snapfit.value}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="text-center p-4 rounded-lg bg-slate-50/50">
+                    <div className="flex flex-col items-center gap-2">
+                      {row.traditional.icon}
+                      <span className="text-slate-600 font-medium">
+                        {row.traditional.value}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="text-center p-4 rounded-lg bg-slate-50/50">
+                    <div className="flex flex-col items-center gap-2">
+                      {row.competitors.icon}
+                      <span className="text-slate-600 font-medium">
+                        {row.competitors.value}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <div className="max-w-3xl mx-auto">
-          <h3 className="text-2xl font-bold text-center mb-8 text-slate-900 dark:text-white">
-            Frequently Asked Questions
-          </h3>
-          
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <div key={index} className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-200">
-                <button
-                  onClick={() => toggleFAQ(index)}
-                  className="w-full p-6 text-left flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 rounded-lg"
-                >
-                  <h4 className="font-semibold text-slate-900 dark:text-white pr-4">{faq.question}</h4>
-                  <div className="flex-shrink-0">
-                    {openFAQ === index ? (
-                      <Minus className="w-5 h-5 text-lime-600 dark:text-lime-400 transition-transform duration-200" />
-                    ) : (
-                      <Plus className="w-5 h-5 text-lime-600 dark:text-lime-400 transition-transform duration-200" />
-                    )}
-                  </div>
-                </button>
-                <div
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    openFAQ === index ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div className="px-6 pb-6">
-                    <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                      {faq.answer}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* Final CTA */}
+        <div className="text-center">
+          <Card className="bg-gradient-to-r from-lime-50 to-green-50 border border-lime-200 p-8 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-slate-900 mb-4">
+              Ready to Transform Your Product Images?
+            </h3>
+            <p className="text-slate-700 mb-6">
+              Join hundreds of brands creating stunning product visuals with SnapFit
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg"
+                className="bg-gradient-to-r from-lime-600 to-green-600 hover:from-lime-700 hover:to-green-700 text-white px-8 shadow-lg"
+              >
+                Start with Free Plan
+              </Button>
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="border-slate-300 text-slate-700 hover:bg-slate-50"
+              >
+                Book a Demo
+              </Button>
+            </div>
+          </Card>
         </div>
       </div>
     </section>

@@ -10,6 +10,8 @@ const Price = () => {
       <div className="relative z-10">
         <Header />
        <PricingSection/>
+
+
         <Footer />
       </div>
     </div>
