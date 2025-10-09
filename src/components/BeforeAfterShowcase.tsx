@@ -1,6 +1,7 @@
 // src/components/BeforeAfterShowcase.tsx
 'use client';
 
+import Image from 'next/image';
 import { useState, useRef, useCallback, useEffect } from 'react';
 
 const BeforeAfterShowcase = () => {
@@ -212,32 +213,33 @@ const BeforeAfterShowcase = () => {
             onTouchEnd={handleInteractionEnd}
           >
             {/* Before Image with Dusty Effect */}
-            <div className="absolute inset-0">
-              <img
-                src={currentExample.before}
-                alt="Before"
-                className="w-full h-full object-cover"
-              />
-              {/* Dusty/Noise Overlay */}
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiBmaWx0ZXI9InVybCgjYSkiIG9wYWNpdHk9Ii4wMiIvPjwvc3ZnPg==')] opacity-30 mix-blend-overlay" />
-            </div>
+          <div className="absolute inset-0">
+  <Image
+    src={currentExample.before}
+    alt="Before"
+    fill
+    className="object-cover"
+    priority
+  />
+  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiBmaWx0ZXI9InVybCgjYSkiIG9wYWNpdHk9Ii4wMiIvPjwvc3ZnPg==')] opacity-30 mix-blend-overlay" />
+</div>
 
-            {/* After Image with Clean Look */}
-            <div
-              className="absolute inset-0"
-              style={{
-                clipPath: `polygon(0 0, ${position}% 0, ${position}% 100%, 0 100%)`,
-              }}
-            >
-              <img
-                src={currentExample.after}
-                alt="After"
-                className="w-full h-full object-cover"
-              />
-              {/* Subtle shine effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-30" />
-            </div>
 
+        <div
+  className="absolute inset-0"
+  style={{
+    clipPath: `polygon(0 0, ${position}% 0, ${position}% 100%, 0 100%)`,
+  }}
+>
+  <Image
+    src={currentExample.after}
+    alt="After"
+    fill
+    className="object-cover"
+    priority
+  />
+  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-30" />
+</div>
             {/* Divider Line with Glow Effect */}
             <div
               className="absolute top-0 bottom-0 w-0.5 z-20"
@@ -281,10 +283,11 @@ const BeforeAfterShowcase = () => {
             </div>
           </div>
 
-          {/* Instructions */}
-          <div className="text-center mt-4 text-gray-500 text-sm">
-            ← Drag or click the handle to compare • Click "Surprise Me" for random reveal →
-          </div>
+  <div className="text-center mt-4 text-gray-500 text-sm">
+  ← Drag or click the handle to compare • Click &quot;Surprise Me&quot; for random reveal →
+</div>
+
+
         </div>
       </div>
     </section>

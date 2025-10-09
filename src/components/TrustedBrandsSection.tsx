@@ -1,5 +1,7 @@
 // src/components/TrustedBrandsSection.tsx
 
+import Image from "next/image";
+
 const TrustedBrandsSection = () => {
   const brands = [
     {
@@ -31,7 +33,7 @@ const TrustedBrandsSection = () => {
               className="flex flex-col items-center group"
             >
               <div className="w-16 h-16 rounded-xl bg-white/50 backdrop-blur-sm border border-border flex items-center justify-center overflow-hidden shadow-sm transition-transform group-hover:scale-105">
-                <img
+                <Image
                   src={brand.logo}
                   alt={brand.name}
                   width={64}
