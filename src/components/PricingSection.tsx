@@ -7,7 +7,6 @@ import { Check, X, Star, Zap, Clock, Shield, Users, Globe, TrendingDown } from "
 
 const PricingSection = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('monthly');
 
   const plans = [
     {

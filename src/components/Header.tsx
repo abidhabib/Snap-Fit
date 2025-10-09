@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Camera, Edit3, Video, Menu, X, ChevronRight, Sparkles, User, Zap } from "lucide-react";
+import { ChevronDown,  Edit3, Video, Menu, X, ChevronRight, Sparkles, User, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
@@ -9,7 +9,7 @@ interface Tool {
   name: string;
   image?: string;
   video?: string;
-  poster?: string;
+  poster?: string; 
   type: "image" | "video";
   description: string;
   comingSoon?: boolean;

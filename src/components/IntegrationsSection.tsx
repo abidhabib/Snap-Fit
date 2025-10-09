@@ -75,7 +75,7 @@ const IntegrationsSection = () => {
           <div>
             <h3 className="text-2xl font-bold mb-8 text-slate-900">Supported Platforms</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {platforms.map((platform, index) => (
+              {platforms.map((platform) => (
                 <Card
                   key={platform.name}
                   className="p-6 bg-white border border-slate-200 hover:border-lime-300 transition-all duration-300 hover:shadow-lg group"
