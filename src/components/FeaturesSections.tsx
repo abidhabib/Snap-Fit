@@ -9,7 +9,7 @@ const FeaturesSection = () => {
     {
       title: "Smart Model Swap & Diversity",
       description: "Offer multiple model types, ethnicities, body types.",
-      image: "/images/model1.png", 
+      image: "/images/cothesModel.png", 
     },
     {
       title: "Background / Scene Customization",
@@ -139,9 +139,10 @@ const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
                 ref={videoRef}
                 muted
                 loop
+                autoPlay
                 playsInline
                 preload="metadata"
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+  className="w-full h-full object-fil bg-[#cac2ad] transition-transform duration-300 group-hover:scale-105"
                 poster={feature.poster}
               >
                 <source src={feature.video} type="video/mp4" />
@@ -157,13 +158,13 @@ const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
               </div>
             </div>
           ) : (
-            <Image
-              src={feature.image || ""}
-              alt={feature.title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
+           <Image
+  src={feature.image || ""}
+  alt={feature.title}
+  fill
+  className="object-contain transition-transform duration-300 group-hover:scale-105"
+  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+/>
           )}
         </div>
       </div>
