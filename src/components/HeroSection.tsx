@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const HeroSection = () => {
   return (
-    <section className="py-16 s ">
+    <section className="py-16">
       <div className="container mx-auto px-4 text-center">
         <h1 className="text-4xl md:text-6xl font-bold mb-6 text-slate-900">
           Stop Losing Sales to Bad Product Images{" "}
@@ -28,7 +28,7 @@ const HeroSection = () => {
           {/* Upload Section */}
           <div>
             <h3 className="text-xl font-bold mb-4 text-left text-slate-900">Upload your product</h3>
-            <p className="mb-6 text-left text-slate-800"> Flat-lay, mannequin, or packshot - SnapFit accepts all.</p>
+            <p className="mb-6 text-left text-slate-800">Flat-lay, mannequin, or packshot - SnapFit accepts all.</p>
             <div className="bg-white/30 backdrop-blur-sm border border-white/40 rounded-lg aspect-[3/4] flex flex-col p-4">
               <div className="relative flex-1 w-full bg-white/70 backdrop-blur-sm border border-white/60 rounded-lg overflow-hidden shadow-lg">
                 <Image
@@ -43,7 +43,8 @@ const HeroSection = () => {
 
           {/* Style Section */}
           <div>
-        
+            <h3 className="text-xl font-bold mb-4 text-left text-slate-900">Customize the Shoot</h3>
+            <p className="mb-6 text-left text-slate-800">Pick your model, pose, and background - or let AI auto-style it.</p>
             <div className="bg-white/30 backdrop-blur-sm border border-white/40 rounded-lg aspect-[3/4] flex flex-col p-4">
               <div className="relative flex-1 w-full bg-white/70 backdrop-blur-sm border border-white/60 rounded-lg overflow-hidden shadow-lg">
                 <Image 
@@ -54,15 +55,12 @@ const HeroSection = () => {
                 />
               </div>
             </div>
-                <h3 className="text-xl font-bold mt-4 text-left text-slate-900">Customize the Shoot</h3>
-            <p className="mb-6 text-left text-slate-800">Pick your model, pose, and background - or let AI auto-style i</p>
           </div>
 
           {/* Create & Share Section */}
           <div>
             <h3 className="text-xl font-bold mb-4 text-left text-slate-900">Generate & Download</h3>
-            <p className="mb-6 text-left text-slate-800"> Get studio-quality images and videos in seconds. Perfectly sized for e-commerce platforms.
-</p>
+            <p className="mb-6 text-left text-slate-800">Get studio-quality images and videos in seconds. Perfectly sized for e-commerce platforms.</p>
             <div className="bg-white/30 backdrop-blur-sm border border-white/40 rounded-lg aspect-[3/4] flex flex-col p-4">
               <div className="relative flex-1 w-full bg-white/70 backdrop-blur-sm border border-white/60 rounded-lg overflow-hidden shadow-lg">
                 <video
