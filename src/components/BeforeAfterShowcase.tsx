@@ -27,7 +27,7 @@ const BeforeAfterShowcase = () => {
   const loopedAfter = [...afterImages, ...afterImages];
 
   return (
-    <section className="relative py-20 overflow-hidden bg-gradient-to-br from-purple-50 via-purple-100/60 to-purple-200/70">
+    <section className="relative py-20 overflow-hidden bg-gradient-to-br from-purple-50 via-purple-100/50 to-purple-200/40">
       <div className="text-center mb-10">
         <h2 className="text-4xl md:text-5xl font-bold">
           Watch the{' '}
@@ -40,10 +40,11 @@ const BeforeAfterShowcase = () => {
         </p>
       </div>
 
-      {/* Wrapper with overflow-hidden */}
-      <div className="relative flex justify-center items-center h-[300px] overflow-hidden rounded-2xl z-10">
-        {/* BEFORE SIDE */}
-        <div className="relative w-1/2 h-full overflow-hidden">
+      {/* Main container with proper z-index layers */}
+      <div className="relative flex justify-center items-center h-[300px] rounded-2xl">
+        
+        {/* LEFT SIDE - Goes UNDER the divider */}
+        <div className="absolute left-0 w-1/2 h-full overflow-hidden z-10">
           {/* Background Slow Layer */}
           <div className="absolute inset-0 opacity-30 blur-sm">
             <div className="flex h-full animate-slide-slow before-after-slider">
@@ -85,8 +86,16 @@ const BeforeAfterShowcase = () => {
           </div>
         </div>
 
-        {/* AFTER SIDE */}
-        <div className="relative w-1/2 h-full overflow-hidden">
+        {/* CENTER DIVIDER - Middle z-index */}
+        <div
+          className="absolute -top-5 left-1/2 -translate-x-1/2 w-16 h-64 rounded-tl-full rounded-br-full bg-gradient-to-b from-purple-200/80 via-purple-400/50 to-purple-600/40 shadow-2xl z-20"
+          style={{
+            boxShadow: '0 0 25px 8px rgba(147, 51, 234, 0.4), inset 0 2px 10px rgba(255, 255, 255, 0.3)',
+          }}
+        />
+
+        {/* RIGHT SIDE - Goes OVER the divider */}
+        <div className="absolute right-0 w-1/2 h-full overflow-hidden z-30">
           {/* Background Slow Layer */}
           <div className="absolute inset-0 opacity-30 blur-sm">
             <div className="flex h-full animate-slide-slow before-after-slider">
@@ -129,17 +138,9 @@ const BeforeAfterShowcase = () => {
         </div>
 
         {/* Fade Edges */}
-        <div className="absolute left-0 top-0 w-40 h-full bg-gradient-to-r from-purple-100 to-transparent z-10" />
-        <div className="absolute right-0 top-0 w-40 h-full bg-gradient-to-l from-purple-100 to-transparent z-10" />
+        <div className="absolute left-0 top-0 w-40 h-full bg-gradient-to-r from-purple-100 to-transparent z-40" />
+        <div className="absolute right-0 top-0 w-40 h-full bg-gradient-to-l from-purple-100 to-transparent z-40" />
       </div>
-
-      {/* Divider moved outside overflow-hidden so top is visible */}
-      <div
-        className="absolute top-48 left-1/2 -translate-x-1/2 w-16 h-56 rounded-tl-full rounded-br-full bg-gradient-to-b from-purple-200/70 via-purple-400/50 to-purple-600/60 shadow-2xl z-20"
-        style={{
-          boxShadow: '0 0 25px 8px rgba(199, 193, 205, 0.5)',
-        }}
-      />
 
       <style jsx>{`
         .before-after-item {
