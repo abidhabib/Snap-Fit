@@ -14,7 +14,7 @@ const FeaturesSection = () => {
     {
       title: "Background / Scene Customization",
       description: "From studio white to lifestyle backgrounds.",
-      image: "/images/content1.png"
+      image: "/images/image-enhancer.png"
     },
     {
       title: "Video Generation", 

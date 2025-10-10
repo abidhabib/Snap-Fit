@@ -60,9 +60,9 @@ const IntegrationsSection = () => {
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-slate-900">
-            Works seamlessly with your{' '}
+            Works Seamlessly With Your{' '}
             <span className="bg-gradient-to-r from-slate-600 to-lime-600 bg-clip-text text-transparent">
-              existing stack
+              Existing Stack
             </span>
           </h2>
           <p className="text-lg text-slate-700 max-w-2xl mx-auto">

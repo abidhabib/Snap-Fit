@@ -9,7 +9,7 @@ const InspirationGallery = () => {
       <section className="px-6 py-16 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
-            Skip the shoots. Just upload.{' '}
+            Skip The Shoots. Just Upload.{' '}
             <span className="bg-gradient-to-r from-slate-600 to-lime-600 bg-clip-text text-transparent">
               Hassle-free.
             </span>
@@ -41,11 +41,11 @@ const InspirationGallery = () => {
               <div className="relative">
                 <div className="relative group">
                  <Image
-                      src="/images/model.png"
+                      src="/images/post.png"
                       alt="Product"
                       width={400}
                       height={400}
-                      className=" "
+                      className=" rounded-xl "
                     />
                  
                  

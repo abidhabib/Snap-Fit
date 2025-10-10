@@ -2,7 +2,6 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ResultsSection from "@/components/ResultsSection";
 import InspirationGallery from "@/components/InspirationGallery";
-import ContentCreationSection from "@/components/ContentCreationSection";
 import FeaturesSections from "@/components/FeaturesSections";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
@@ -27,7 +26,6 @@ export default function Home() {
         <ResultsSection />
 
         <InspirationGallery />
-        <ContentCreationSection />
         <CTASection/>
         <FAQSection />
     
