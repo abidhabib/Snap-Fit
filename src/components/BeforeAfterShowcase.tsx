@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState, useRef, useCallback, useEffect } from 'react';
 
-// Define types
+// Define typesx
 interface ExampleItem {
   before: string;
   after: string;
