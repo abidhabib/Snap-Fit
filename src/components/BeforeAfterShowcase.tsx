@@ -27,7 +27,7 @@ const BeforeAfterShowcase = () => {
   const loopedAfter = [...afterImages, ...afterImages];
 
   return (
-    <section className="relative py-20 overflow-hidden bg-gradient-to-br from-purple-50 via-purple-100 to-purple-200">
+    <section className="relative py-20 overflow-hidden bg-gradient-to-br from-purple-50 via-purple-100/60 to-purple-200/70">
       <div className="text-center mb-10">
         <h2 className="text-4xl md:text-5xl font-bold">
           Watch the{' '}
