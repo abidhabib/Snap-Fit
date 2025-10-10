@@ -1,239 +1,208 @@
 'use client';
 
-import Image from 'next/image';
-import { useState, useRef, useCallback, useEffect } from 'react';
-
-// Define typesx
-interface ExampleItem {
-  before: string;
-  after: string;
-  name: string;
-}
-
-interface BeforeAfterCardProps {
-  item: ExampleItem;
-  index: number;
-}
+import React from 'react';
 
 const BeforeAfterShowcase = () => {
-  const examples: ExampleItem[] = [
-    {
-      before: '/images/Slider/IMG-20251010-WA0005.jpg',
-      after: '/images/Slider/IMG-20251010-WA0006.jpg',
-      name: 'Summer Dress'
-    },
-    {
-      before: '/images/Slider/IMG-20251010-WA0007.jpg',
-      after: '/images/Slider/IMG-20251010-WA0008.jpg',
-      name: 'Casual Tee'
-    },
-    {
-      before: '/images/Slider/IMG-20251010-WA0009.jpg',
-      after: '/images/Slider/IMG-20251010-WA0010.jpg',
-      name: 'Evening Gown'
-    },
-    {
-      before: '/images/Slider/IMG-20251010-WA0011.jpg',
-      after: '/images/Slider/IMG-20251010-WA0012.jpg',
-      name: 'Office Wear'
-    },
-    {
-      before: '/images/Slider/IMG-20251010-WA0013.jpg',
-      after: '/images/Slider/IMG-20251010-WA0014.jpg',
-      name: 'Sports Outfit'
-    },
-    {
-      before: '/images/Slider/IMG-20251010-WA0015.jpg',
-      after: '/images/Slider/IMG-20251010-WA0016.jpg',
-      name: 'Beach Wear'
-    },
+  const beforeImages = [
+    'IMG-20251010-WA0005.jpg',
+    'IMG-20251010-WA0007.jpg',
+    'IMG-20251010-WA0009.jpg',
+    'IMG-20251010-WA0011.jpg',
+    'IMG-20251010-WA0013.jpg',
+    'IMG-20251010-WA0015.jpg'
   ];
 
-  const BeforeAfterCard = ({ item, index }: BeforeAfterCardProps) => {
-    const [position, setPosition] = useState(50);
-    const [isDragging, setIsDragging] = useState(false);
-    const containerRef = useRef<HTMLDivElement>(null);
+  const afterImages = [
+    'IMG-20251010-WA0006.jpg',
+    'IMG-20251010-WA0008.jpg',
+    'IMG-20251010-WA0010.jpg',
+    'IMG-20251010-WA0012.jpg',
+    'IMG-20251010-WA0014.jpg',
+    'IMG-20251010-WA0016.jpg'
+  ];
 
-    const handleInteractionStart = useCallback((clientX: number) => {
-      setIsDragging(true);
-      if (containerRef.current) {
-        const container = containerRef.current.getBoundingClientRect();
-        const x = clientX - container.left;
-        const pct = (x / container.width) * 100;
-        setPosition(Math.max(0, Math.min(100, pct)));
-      }
-    }, []);
-
-    const handleInteractionMove = useCallback(
-      (clientX: number) => {
-        if (isDragging && containerRef.current) {
-          const container = containerRef.current.getBoundingClientRect();
-          const x = clientX - container.left;
-          const pct = (x / container.width) * 100;
-          setPosition(Math.max(0, Math.min(100, pct)));
-        }
-      },
-      [isDragging]
-    );
-
-    const handleInteractionEnd = useCallback(() => {
-      setIsDragging(false);
-    }, []);
-
-    const handleMouseDown = (e: React.MouseEvent) => {
-      e.preventDefault();
-      handleInteractionStart(e.clientX);
-    };
-
-    const handleTouchStart = (e: React.TouchEvent) => {
-      e.preventDefault();
-      if (e.touches[0]) {
-        handleInteractionStart(e.touches[0].clientX);
-      }
-    };
-
-    useEffect(() => {
-      const handleGlobalMouseMove = (e: MouseEvent) => {
-        if (isDragging) handleInteractionMove(e.clientX);
-      };
-
-      const handleGlobalMouseUp = () => {
-        handleInteractionEnd();
-      };
-
-      const handleGlobalTouchMove = (e: TouchEvent) => {
-        if (isDragging && e.touches[0]) {
-          handleInteractionMove(e.touches[0].clientX);
-        }
-      };
-
-      const handleGlobalTouchEnd = () => {
-        handleInteractionEnd();
-      };
-
-      if (isDragging) {
-        document.addEventListener('mousemove', handleGlobalMouseMove);
-        document.addEventListener('mouseup', handleGlobalMouseUp);
-        document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
-        document.addEventListener('touchend', handleGlobalTouchEnd);
-        document.body.style.userSelect = 'none';
-      }
-
-      return () => {
-        document.removeEventListener('mousemove', handleGlobalMouseMove);
-        document.removeEventListener('mouseup', handleGlobalMouseUp);
-        document.removeEventListener('touchmove', handleGlobalTouchMove);
-        document.removeEventListener('touchend', handleGlobalTouchEnd);
-        document.body.style.userSelect = '';
-      };
-    }, [isDragging, handleInteractionMove, handleInteractionEnd]);
-
-    return (
-      <div className="group flex-shrink-0 w-[180px] md:w-[200px] flex flex-col items-center">
-        {/* Card Container — light purple faded bg ONLY here */}
-        <div className="transition-all duration-300 border border-purple-100/40 hover:border-purple-200/60 w-full">
-          {/* Before/After Slider Container */}
-          <div className="rounded-xl overflow-hidden shadow-sm hover:shadow-lg">
-            <div
-              ref={containerRef}
-              className="relative w-full aspect-[3/4] cursor-ew-resize"
-              onMouseDown={handleMouseDown}
-              onTouchStart={handleTouchStart}
-            >
-              {/* Dark overlay for better contrast */}
-              <div className="absolute inset-0 bg-black/5 pointer-events-none z-10" />
-
-              {/* Before Image (Product) */}
-              <div className="absolute inset-0">
-                <Image
-                  src={item.before}
-                  alt="Product"
-                  fill
-                  sizes="(max-width: 768px) 180px, 200px"
-                  priority={index < 2}
-                />
-              </div>
-
-              <div
-                className="absolute inset-0"
-                style={{
-                  clipPath: `polygon(0 0, ${position}% 0, ${position}% 100%, 0 100%)`,
-                }}
-              >
-                <Image
-                  src={item.after}
-                  alt="Model wearing product"
-                  fill
-                  className="object-contain" // ✅ fixed from 'object-fit'
-                  sizes="(max-width: 768px) 180px, 200px"
-                  priority={index < 2}
-                />
-              </div>
-
-              {/* Divider Line */}
-              <div
-                className="absolute top-0 bottom-0 w-0.5 z-20"
-                style={{ left: `${position}%` }}
-              >
-                <div className="absolute inset-y-0 left-1/2 w-0.5 -ml-0.5 bg-gray-100 shadow-md" />
-              </div>
-
-              {/* Handle */}
-              <div
-                className={`absolute top-1/2 z-30 w-6 h-6 -ml-3 -mt-3 bg-purple-500 rounded-full shadow-lg flex items-center justify-center cursor-grab active:cursor-grabbing transition-all duration-200 ${
-                  isDragging ? 'scale-110' : 'hover:bg-purple-600'
-                }`}
-                style={{ left: `${position}%` }}
-              >
-                <div className="flex space-x-0.5 transform rotate-90">
-                  <div className="w-0.5 h-1 bg-white rounded-full" />
-                  <div className="w-0.5 h-1 bg-white rounded-full" />
-                </div>
-              </div>
-
-              {/* Label + Button */}
-              <div className="absolute bottom-2 left-2 z-30 flex flex-col items-start space-y-1">
-                <span className="text-white text-xs font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
-                  {item.name}
-                </span>
-                <button
-                  className="px-2 py-1 text-[10px] font-medium text-white rounded-full 
-                            backdrop-blur-sm bg-white/10 border border-white/20 
-                            hover:bg-white/20 active:bg-white/30 transition-all duration-200
-                            shadow-[0_2px_4px_rgba(0,0,0,0.2)]"
-                >
-                  View Details
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  const itemNames = ["Aurora", "Vesper", "Kairo", "Lumen", "Riven", "Nexa"];
+  const numPairs = beforeImages.length;
+  const loopedBefore = [...beforeImages, ...beforeImages];
+  const loopedAfter = [...afterImages, ...afterImages];
 
   return (
-    <section className="py-6 px-4">
-      <div className="max-w-full">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            See the{' '}
-            <span className="bg-gradient-to-r from-slate-600 to-lime-600 bg-clip-text text-transparent">
-              SnapFit Difference
-            </span>
-          </h2>
-          <p className="text-gray-600 text-lg">
-            Drag the slider to compare original and enhanced images
-          </p>
+    <section className="relative py-20 overflow-hidden bg-gradient-to-br from-purple-50 via-purple-100 to-purple-200">
+      <div className="text-center mb-10">
+        <h2 className="text-4xl md:text-5xl font-bold">
+          Watch the{' '}
+          <span className="text-center text-4xl font-extrabold italic bg-gradient-to-r from-purple-700 to-lime-500 bg-clip-text text-transparent">
+            SnapFit Transformation
+          </span>
+        </h2>
+        <p className="mt-2 max-w-xl mx-auto text-gray-700">
+          See our products come to life — from display to perfect fit.
+        </p>
+      </div>
+
+      {/* Wrapper with overflow-hidden */}
+      <div className="relative flex justify-center items-center h-[300px] overflow-hidden rounded-2xl z-10">
+        {/* BEFORE SIDE */}
+        <div className="relative w-1/2 h-full overflow-hidden">
+          {/* Background Slow Layer */}
+          <div className="absolute inset-0 opacity-30 blur-sm">
+            <div className="flex h-full animate-slide-slow before-after-slider">
+              {loopedBefore.map((src, idx) => (
+                <div key={`bg-before-${idx}`} className="before-after-item">
+                  <img
+                    src={`/images/Slider/${src}`}
+                    alt=""
+                    className="object-cover w-full h-full rounded-2xl border-4 border-white"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Foreground Fast Layer */}
+          <div className="relative flex h-full animate-slide-fast before-after-slider">
+            {loopedBefore.map((src, idx) => {
+              const name = itemNames[idx % numPairs];
+              return (
+                <div key={`before-${idx}`} className="before-after-item relative">
+                  <img
+                    src={`/images/Slider/${src}`}
+                    alt={`Product ${name}`}
+                    className="object-cover w-full h-full rounded-2xl border-4 border-white"
+                  />
+                  <div className="absolute inset-0 bg-black/20 rounded-2xl" />
+                  <div className="absolute bottom-3 left-3 text-white flex flex-col leading-tight z-10">
+                    <p className="text-[10px] tracking-wider mb-1 font-semibold opacity-90">
+                      UPLOAD BY
+                    </p>
+                    <span className="text-sm font-medium px-2 rounded-full border border-white/40 backdrop-blur-sm bg-black/30 w-fit">
+                      {name}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* ✅ Light purple background ONLY on carousel container */}
-        <div className="flex justify-center gap-4 md:gap-6 overflow-x-auto scrollbar-hide p-16 bg-gradient-to-br from-purple-50/60 to-purple-100/40 rounded-2xl">
-          {examples.map((item, index) => (
-            <BeforeAfterCard key={index} item={item} index={index} />
-          ))}
+        {/* AFTER SIDE */}
+        <div className="relative w-1/2 h-full overflow-hidden">
+          {/* Background Slow Layer */}
+          <div className="absolute inset-0 opacity-30 blur-sm">
+            <div className="flex h-full animate-slide-slow before-after-slider">
+              {loopedAfter.map((src, idx) => (
+                <div key={`bg-after-${idx}`} className="before-after-item">
+                  <img
+                    src={`/images/Slider/${src}`}
+                    alt=""
+                    className="object-cover w-full h-full rounded-2xl border-4 border-white"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Foreground Fast Layer */}
+          <div className="relative flex h-full animate-slide-fast before-after-slider">
+            {loopedAfter.map((src, idx) => {
+              const name = itemNames[idx % numPairs];
+              return (
+                <div key={`after-${idx}`} className="before-after-item relative">
+                  <img
+                    src={`/images/Slider/${src}`}
+                    alt={`Model ${name}`}
+                    className="object-cover w-full h-full rounded-2xl border-4 border-white"
+                  />
+                  <div className="absolute inset-0 bg-black/15 rounded-2xl" />
+                  <div className="absolute bottom-3 left-3 text-white flex flex-col leading-tight z-10">
+                    <p className="text-[10px] tracking-wider mb-1 font-semibold opacity-90">
+                      UPLOAD BY
+                    </p>
+                    <span className="text-sm font-medium px-2 rounded-full border border-white/40 backdrop-blur-sm bg-black/30 w-fit">
+                      {name}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
+
+        {/* Fade Edges */}
+        <div className="absolute left-0 top-0 w-40 h-full bg-gradient-to-r from-purple-100 to-transparent z-10" />
+        <div className="absolute right-0 top-0 w-40 h-full bg-gradient-to-l from-purple-100 to-transparent z-10" />
       </div>
+
+      {/* Divider moved outside overflow-hidden so top is visible */}
+      <div
+        className="absolute top-48 left-1/2 -translate-x-1/2 w-16 h-56 rounded-tl-full rounded-br-full bg-gradient-to-b from-purple-200/70 via-purple-400/50 to-purple-600/60 shadow-2xl z-20"
+        style={{
+          boxShadow: '0 0 25px 8px rgba(199, 193, 205, 0.5)',
+        }}
+      />
+
+      <style jsx>{`
+        .before-after-item {
+          width: 100px;
+          height: 160px;
+          margin: 0 6px;
+          flex: 0 0 auto;
+          position: relative;
+          border-radius: 1rem;
+          overflow: hidden;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        @media (min-width: 640px) {
+          .before-after-item {
+            width: 120px;
+            height: 180px;
+          }
+        }
+
+        @media (min-width: 768px) {
+          .before-after-item {
+            width: 140px;
+            height: 200px;
+          }
+        }
+
+        .before-after-slider {
+          display: flex;
+          width: max-content;
+          will-change: transform;
+        }
+
+        @keyframes slide-fast {
+          0% {
+            transform: translateX(-50%);
+          }
+          100% {
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes slide-slow {
+          0% {
+            transform: translateX(-50%);
+          }
+          100% {
+            transform: translateX(0);
+          }
+        }
+
+        .animate-slide-fast {
+          animation: slide-fast 40s linear infinite;
+        }
+
+        .animate-slide-slow {
+          animation: slide-slow 90s linear infinite;
+        }
+
+        .before-after-slider:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
     </section>
   );
 };
