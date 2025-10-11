@@ -130,7 +130,7 @@ const ProductCatalogGrid = () => {
         {/* Bottom Info */}
         <div className="text-center mt-10">
           <p className="text-slate-600 text-sm">
-            ✨ Transform <span className="font-semibold text-slate-900">16+ images</span> in seconds
+            ✨ Transform <span className="font-semibold text-slate-900">images</span> in seconds
           </p>
         </div>
       </div>

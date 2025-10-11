@@ -2,107 +2,127 @@
 
 import React, { useState, useEffect } from 'react';
 
+// 1. Define the exact tab names as a union type
+type TabName = 
+  | 'Fashion Generator'
+  | 'SEO Keywords'
+  | 'Clean Up'
+  | 'Upscaler'
+  | 'Remove Background';
+
+// 2. Define the shape of each tab's data
+interface TabDataItem {
+  title: string;
+  subtitle: string;
+  cards: {
+    productImg: string;
+    videoUrl: string;
+    caption: string;
+  }[];
+}
+
+// 3. Define tabData with explicit typing
+const tabData = {
+  'Fashion Generator': {
+    title: 'Fashion Generator',
+    subtitle: 'Turn your modeless images into studio-quality product photos.',
+    cards: [
+      {
+        productImg: 'https://picsum.photos/seed/fashion1/200/250',
+        videoUrl: '/gifs/1.mp4',
+        caption: 'Works with a wide variety of garment fits',
+      },
+      {
+        productImg: 'https://picsum.photos/seed/fashion2/200/250',
+        videoUrl: '/gifs/1.mp4',
+        caption: 'Increase your brand diversity with any model',
+      },
+    ],
+  },
+  'SEO Keywords': {
+    title: 'SEO Keywords',
+    subtitle: 'Generate high-converting keywords for your product listings.',
+    cards: [
+      {
+        productImg: 'https://picsum.photos/seed/seo1/200/250',
+        videoUrl: '/gifs/1.mp4',
+        caption: 'Optimize for search engines with AI-powered suggestions',
+      },
+    ],
+  },
+  'Clean Up': {
+    title: 'Clean Up',
+    subtitle: 'Remove noise, wrinkles, and imperfections from your product images.',
+    cards: [
+      {
+        productImg: 'https://picsum.photos/seed/cleanup1/200/250',
+        videoUrl: '/gifs/1.mp4',
+        caption: 'Perfect for e-commerce product shots',
+      },
+      {
+        productImg: 'https://picsum.photos/seed/cleanup2/200/250',
+        videoUrl: '/gifs/1.mp4',
+        caption: 'Get crisp, clean images ready for store listing',
+      },
+      {
+        productImg: 'https://picsum.photos/seed/cleanup3/200/250',
+        videoUrl: '/gifs/1.mp4',
+        caption: 'Remove unwanted objects and imperfections instantly',
+      },
+    ],
+  },
+  'Upscaler': {
+    title: 'Upscaler',
+    subtitle: 'Enhance low-res images to 4K without losing quality.',
+    cards: [
+      {
+        productImg: 'https://picsum.photos/seed/upscaler1/200/250',
+        videoUrl: '/gifs/1.mp4',
+        caption: 'Perfect for social media and print ads',
+      },
+      {
+        productImg: 'https://picsum.photos/seed/upscaler2/200/250',
+        videoUrl: '/gifs/1.mp4',
+        caption: 'Preserve details while increasing resolution',
+      },
+      {
+        productImg: 'https://picsum.photos/seed/upscaler3/200/250',
+        videoUrl: '/gifs/1.mp4',
+        caption: 'Scale up to 4x without quality loss',
+      },
+    ],
+  },
+  'Remove Background': {
+    title: 'Remove Background',
+    subtitle: 'Automatically remove backgrounds with AI precision.',
+    cards: [
+      {
+        productImg: 'https://picsum.photos/seed/removebg1/200/250',
+        videoUrl: '/gifs/1.mp4',
+        caption: 'Instantly create clean product cutouts',
+      },
+      {
+        productImg: 'https://picsum.photos/seed/removebg2/200/250',
+        videoUrl: '/gifs/1.mp4',
+        caption: 'Ideal for catalogs, ads, and marketplaces',
+      },
+      {
+        productImg: 'https://picsum.photos/seed/removebg3/200/250',
+        videoUrl: '/gifs/1.mp4',
+        caption: 'Precise edge detection for complex products',
+      },
+    ],
+  },
+} satisfies Record<TabName, TabDataItem>; // ✅ Ensures all keys match TabName
+
 const CreativeMultiToolSection = () => {
-  const [activeTab, setActiveTab] = useState('Fashion Generator');
+  // 4. Type activeTab as TabName (not just string)
+  const [activeTab, setActiveTab] = useState<TabName>('Fashion Generator');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Mock data for tabs with different number of cards
-  const tabData = {
-    'Fashion Generator': {
-      title: 'Fashion Generator',
-      subtitle: 'Turn your modeless images into studio-quality product photos.',
-      cards: [
-        {
-          productImg: 'https://picsum.photos/seed/fashion1/200/250',
-          videoUrl: '/gifs/1.mp4',
-          caption: 'Works with a wide variety of garment fits',
-        },
-        {
-          productImg: 'https://picsum.photos/seed/fashion2/200/250',
-          videoUrl: '/gifs/1.mp4',
-          caption: 'Increase your brand diversity with any model',
-        },
-      ],
-    },
-    'SEO Keywords': {
-      title: 'SEO Keywords',
-      subtitle: 'Generate high-converting keywords for your product listings.',
-      cards: [
-        {
-          productImg: 'https://picsum.photos/seed/seo1/200/250',
-          videoUrl: '/gifs/1.mp4',
-          caption: 'Optimize for search engines with AI-powered suggestions',
-        },
-      ],
-    },
-    'Clean Up': {
-      title: 'Clean Up',
-      subtitle: 'Remove noise, wrinkles, and imperfections from your product images.',
-      cards: [
-        {
-          productImg: 'https://picsum.photos/seed/cleanup1/200/250',
-          videoUrl: '/gifs/1.mp4',
-          caption: 'Perfect for e-commerce product shots',
-        },
-        {
-          productImg: 'https://picsum.photos/seed/cleanup2/200/250',
-          videoUrl: '/gifs/1.mp4',
-          caption: 'Get crisp, clean images ready for store listing',
-        },
-        {
-          productImg: 'https://picsum.photos/seed/cleanup3/200/250',
-          videoUrl: '/gifs/1.mp4',
-          caption: 'Remove unwanted objects and imperfections instantly',
-        },
-      ],
-    },
-    'Upscaler': {
-      title: 'Upscaler',
-      subtitle: 'Enhance low-res images to 4K without losing quality.',
-      cards: [
-        {
-          productImg: 'https://picsum.photos/seed/upscaler1/200/250',
-          videoUrl: '/gifs/1.mp4',
-          caption: 'Perfect for social media and print ads',
-        },
-        {
-          productImg: 'https://picsum.photos/seed/upscaler2/200/250',
-          videoUrl: '/gifs/1.mp4',
-          caption: 'Preserve details while increasing resolution',
-        },
-        {
-          productImg: 'https://picsum.photos/seed/upscaler3/200/250',
-          videoUrl: '/gifs/1.mp4',
-          caption: 'Scale up to 4x without quality loss',
-        },
-      ],
-    },
-    'Remove Background': {
-      title: 'Remove Background',
-      subtitle: 'Automatically remove backgrounds with AI precision.',
-      cards: [
-        {
-          productImg: 'https://picsum.photos/seed/removebg1/200/250',
-          videoUrl: '/gifs/1.mp4',
-          caption: 'Instantly create clean product cutouts',
-        },
-        {
-          productImg: 'https://picsum.photos/seed/removebg2/200/250',
-          videoUrl: '/gifs/1.mp4',
-          caption: 'Ideal for catalogs, ads, and marketplaces',
-        },
-        {
-          productImg: 'https://picsum.photos/seed/removebg3/200/250',
-          videoUrl: '/gifs/1.mp4',
-          caption: 'Precise edge detection for complex products',
-        },
-      ],
-    },
-  };
-
+  // 5. Now this is type-safe!
   const currentData = tabData[activeTab];
 
-  // Trigger transition animation when tab changes
   useEffect(() => {
     setIsTransitioning(true);
     const timer = setTimeout(() => setIsTransitioning(false), 400);
@@ -144,7 +164,7 @@ const CreativeMultiToolSection = () => {
 
         {/* Tabs - Pill Buttons */}
         <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {Object.keys(tabData).map((tab) => (
+          {(Object.keys(tabData) as TabName[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -159,7 +179,7 @@ const CreativeMultiToolSection = () => {
           ))}
         </div>
 
-        {/* Video Cards Grid - Centered with staggered animation */}
+        {/* Video Cards Grid */}
         <div className="max-w-6xl mx-auto flex flex-wrap justify-center gap-8">
           {currentData.cards.map((card, index) => (
             <div
@@ -173,7 +193,6 @@ const CreativeMultiToolSection = () => {
                 transitionDelay: isTransitioning ? '0ms' : `${index * 100}ms`
               }}
             >
-              {/* Video Container */}
               <div className="relative bg-gradient-to-br from-slate-100 to-lime-100/50 rounded-xl aspect-video overflow-hidden border border-slate-200 group-hover:border-lime-300 transition-all duration-300 shadow-lg group-hover:shadow-xl mb-4 group-hover:scale-[1.02]">
                 <video
                   key={`${activeTab}-${index}`}
@@ -184,13 +203,11 @@ const CreativeMultiToolSection = () => {
                   autoPlay
                   playsInline
                 />
-                
-                {/* Play button overlay on hover */}
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <button 
                     className="bg-slate-900/80 p-3 rounded-full text-white hover:bg-slate-900 transition-all duration-300 shadow-lg transform hover:scale-110"
                     onClick={(e) => {
-                      const video = e.currentTarget.parentElement?.parentElement?.querySelector('video');
+                      const video = e.currentTarget.parentElement?.parentElement?.querySelector('video') as HTMLVideoElement | null;
                       if (video) {
                         video.muted = false;
                         video.play();
@@ -203,45 +220,26 @@ const CreativeMultiToolSection = () => {
                   </button>
                 </div>
               </div>
-
-              {/* Caption */}
               <p className="text-sm text-slate-700 leading-relaxed text-center transition-all duration-300">{card.caption}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Blob animation styles */}
       <style jsx>{`
         @keyframes blob {
-          0% {
-            transform: translate(0px, 0px) scale(1);
-          }
-          33% {
-            transform: translate(30px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-          100% {
-            transform: translate(0px, 0px) scale(1);
-          }
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
         }
         .animate-blob {
           animation: blob 15s infinite;
         }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-3000 {
-          animation-delay: 3s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-        .animation-delay-6000 {
-          animation-delay: 6s;
-        }
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-3000 { animation-delay: 3s; }
+        .animation-delay-4000 { animation-delay: 4s; }
+        .animation-delay-6000 { animation-delay: 6s; }
       `}</style>
     </section>
   );
