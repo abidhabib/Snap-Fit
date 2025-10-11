@@ -3,24 +3,23 @@
 import React from 'react';
 
 const BeforeAfterShowcase = () => {
-  const beforeImages = [
-    'IMG-20251010-WA0005.jpg',
-    'IMG-20251010-WA0007.jpg',
-    'IMG-20251010-WA0009.jpg',
-    'IMG-20251010-WA0011.jpg',
-    'IMG-20251010-WA0013.jpg',
-    'IMG-20251010-WA0015.jpg'
-  ];
+const beforeImages = [
+  '1-before.jpg',
+  '2-before.jpg',
+  '3-before.jpg',
+  '4-before.jpg',
+  '5-before.jpg',
+  '6-before.jpg'
+];
 
-  const afterImages = [
-    'IMG-20251010-WA0006.jpg',
-    'IMG-20251010-WA0008.jpg',
-    'IMG-20251010-WA0010.jpg',
-    'IMG-20251010-WA0012.jpg',
-    'IMG-20251010-WA0014.jpg',
-    'IMG-20251010-WA0016.jpg'
-  ];
-
+const afterImages = [
+  '1-after.jpg',
+  '2-after.jpg',
+  '3-after.jpg',
+  '4-after.jpg',
+  '5-after.jpg',
+  '6-after.jpg'
+];
   const itemNames = ["Aurora", "Vesper", "Kairo", "Lumen", "Riven", "Nexa"];
   const numPairs = beforeImages.length;
   const loopedBefore = [...beforeImages, ...beforeImages];
@@ -44,7 +43,7 @@ const BeforeAfterShowcase = () => {
       <div className="relative flex justify-center items-center h-[300px] rounded-2xl">
         
         {/* LEFT SIDE - Goes UNDER the divider */}
-        <div className="absolute left-0 w-1/2 h-full overflow-hidden z-10">
+        <div className="absolute left-8 w-1/2 h-full overflow-hidden z-10">
           {/* Background Slow Layer */}
           <div className="absolute inset-0 opacity-30 blur-sm">
             <div className="flex h-full animate-slide-slow before-after-slider">
@@ -86,14 +85,13 @@ const BeforeAfterShowcase = () => {
           </div>
         </div>
 
-        {/* CENTER DIVIDER - Middle z-index */}
-        <div
-          className="absolute -top-5 left-1/2 -translate-x-1/2 w-16 h-64 rounded-tl-full rounded-br-full bg-gradient-to-b from-purple-200/80 via-purple-400/50 to-purple-600/40 shadow-2xl z-20"
-          style={{
-            boxShadow: '0 0 25px 8px rgba(147, 51, 234, 0.4), inset 0 2px 10px rgba(255, 255, 255, 0.3)',
-          }}
-        />
-
+  {/* CENTER DIVIDER - Flipped (mirrored vertically) */}
+<div
+  className="absolute -top-5 left-1/2 -translate-x-1/2 w-16 h-64 rounded-bl-full rounded-tr-full bg-gradient-to-b from-purple-200/80 via-purple-400/50 to-purple-600/40 shadow-2xl z-20"
+  style={{
+    boxShadow: '0 0 25px 8px rgba(147, 51, 234, 0.4), inset 0 2px 10px rgba(255, 255, 255, 0.3)',
+  }}
+/>
         {/* RIGHT SIDE - Goes OVER the divider */}
         <div className="absolute right-0 w-1/2 h-full overflow-hidden z-30">
           {/* Background Slow Layer */}
@@ -123,7 +121,7 @@ const BeforeAfterShowcase = () => {
                     className="object-cover w-full h-full rounded-2xl border-4 border-white"
                   />
                   <div className="absolute inset-0 bg-black/15 rounded-2xl" />
-                  <div className="absolute bottom-3 left-3 text-white flex flex-col leading-tight z-10">
+                  <div className="absolute bottom-3 right-3 text-white flex flex-col leading-tight z-10">
                     <p className="text-[10px] tracking-wider mb-1 font-semibold opacity-90">
                       UPLOAD BY
                     </p>
@@ -150,7 +148,6 @@ const BeforeAfterShowcase = () => {
           flex: 0 0 auto;
           position: relative;
           border-radius: 1rem;
-          overflow: hidden;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
 

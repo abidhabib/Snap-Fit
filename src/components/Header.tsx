@@ -338,6 +338,13 @@ const Header = () => {
                 Inspiration
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-lime-500 transition-all duration-300 group-hover:w-full"></span>
               </Link>
+               <Link 
+                href="/contact" 
+                className="text-slate-700 hover:text-slate-900 transition-colors font-medium py-2 relative group"
+              >
+                Contact
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-lime-500 transition-all duration-300 group-hover:w-full"></span>
+              </Link>
             </nav>
 
             {/* Desktop Right side */}

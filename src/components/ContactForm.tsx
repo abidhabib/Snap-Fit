@@ -1,22 +1,19 @@
 "use client";
-import React, { useState, useRef, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import React, { useState, useRef } from "react";
+import { useForm } from "react-hook-form";
+import { SendHorizonal } from "lucide-react";
+import Image from "next/image";
 
 type FormData = {
   name: string;
   email: string;
-  company?: string;
   phone?: string;
-  subject: string;
+  company?: string;
   message: string;
 };
 
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
-  const [focusedField, setFocusedField] = useState<string | null>(null);
-  const [isClient, setIsClient] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const {
@@ -24,368 +21,133 @@ const ContactForm = () => {
     handleSubmit,
     formState: { errors },
     reset,
-    watch
   } = useForm<FormData>({
-    mode: 'onBlur'
+    mode: "onBlur",
   });
-
-  const watchedFields = watch();
-
-  useEffect(() => {
-    setIsClient(true);
-    
-    const handleFocusIn = (e: FocusEvent) => {
-      if (e.target instanceof HTMLElement && e.target.id) {
-        setFocusedField(e.target.id);
-      }
-    };
-
-    const handleFocusOut = () => {
-      setFocusedField(null);
-    };
-
-    document.addEventListener('focusin', handleFocusIn);
-    document.addEventListener('focusout', handleFocusOut);
-
-    return () => {
-      document.removeEventListener('focusin', handleFocusIn);
-      document.removeEventListener('focusout', handleFocusOut);
-    };
-  }, []);
-
-  const isFieldActive = (fieldName: keyof FormData) => {
-    if (!isClient) return false;
-    return !!watchedFields[fieldName] || focusedField === fieldName;
-  };
-
-  const hasError = (fieldName: keyof FormData) => {
-    return !!errors[fieldName];
-  };
-
-  const getFieldClasses = (fieldName: keyof FormData) => {
-    const baseClasses = "w-full px-0 py-3 bg-transparent border-0 border-b-2 transition-colors focus:outline-none focus:ring-0 placeholder-transparent";
-    
-    if (hasError(fieldName)) {
-      return `${baseClasses} border-red-500 focus:border-red-500`;
-    }
-    if (isFieldActive(fieldName)) {
-      return `${baseClasses} border-lime-500 focus:border-lime-500`;
-    }
-    return `${baseClasses} border-gray-300 focus:border-lime-500`;
-  };
-
-  const getLabelClasses = (fieldName: keyof FormData) => {
-    const baseClasses = "absolute left-0 transition-all duration-200 pointer-events-none";
-    const positionClasses = isFieldActive(fieldName) ? "-top-6 text-sm" : "top-3 text-base";
-    
-    if (hasError(fieldName)) {
-      return `${baseClasses} ${positionClasses} text-red-500`;
-    }
-    if (isFieldActive(fieldName)) {
-      return `${baseClasses} ${positionClasses} text-lime-600`;
-    }
-    return `${baseClasses} ${positionClasses} text-gray-500`;
-  };
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    setSubmitStatus(null);
-    
     try {
-      // Simulate API call - replace with your actual API endpoint
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      console.log('Form data:', data);
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      console.log("Form data:", data);
       reset();
-      setSubmitStatus('success');
     } catch (error) {
       console.error(error);
-      setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const inputClasses =
+    "w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent";
+  const textareaClasses =
+    "w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none";
+
   return (
-    <div className="min-h-screen py-12 px-4">
+    <div className="min-h-screen py-8 md:py-16 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">Get In Touch</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Ready to take your project to the next level? {"We'd"} love to hear from you. 
-            Send us a message and {"we'll"} respond as soon as possible.
+        <div className="text-center mb-12 md:mb-16">
+          <h1 className="text-6xl font-bold text-gray-900 mb-3 md:mb-4 bg-gradient-to-r from-slate-600 to-lime-600 bg-clip-text text-transparent">
+            Get In Touch
+          </h1>
+          <p className="text-base text-gray-600 max-w-2xl mx-auto px-4 inline-block bg-lime-100 text-lime-800 px-4 py-1 rounded-full text-sm">
+            Ready to take your project to the next level? We love to hear from you.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Contact Information Card */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-3xl shadow-2xl p-8 h-fit">
-              <h2 className="text-2xl font-bold text-gray-900 mb-8">Contact Information</h2>
-              
-              <div className="space-y-6">
-                <div className="flex items-center space-x-4">
-                  <div className="bg-blue-100 p-3 rounded-full">
-                    <Mail className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900">Email</p>
-                    <p className="text-gray-600">hello@yourcompany.com</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="bg-lime-100 p-3 rounded-full">
-                    <Phone className="w-6 h-6 text-lime-600" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900">Phone</p>
-                    <p className="text-gray-600">+1 (555) 123-4567</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="bg-purple-100 p-3 rounded-full">
-                    <MapPin className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900">Office</p>
-                    <p className="text-gray-600">123 Business Ave<br />Suite 100, City, ST 12345</p>
-                  </div>
-                </div>
+        {/* Main Wrapper */}
+        <div className="relative overflow-hidden rounded-xl border border-gray-200 shadow-lg">
+          {/* Updated grid: image = 40%, form = 60% on large screens */}
+          <div className="grid lg:grid-cols-[40%_1fr] gap-0">
+            {/* --- Left Image Section (Reduced Width) --- */}
+            <div className="hidden lg:block relative bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 rounded-l-xl overflow-hidden">
+              <div className="absolute -inset-20 rotate-20">
+                <Image
+                  src="/images/cothesModel.png"
+                  alt="Fashion Collage"
+                  fill
+                  className="object-cover object-center"
+                  priority
+                />
               </div>
-
-              <div className="mt-8 pt-8 border-t border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-4">Business Hours</h3>
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Monday - Friday</span>
-                    <span className="text-gray-900 font-medium">9:00 AM - 6:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Saturday</span>
-                    <span className="text-gray-900 font-medium">10:00 AM - 4:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Sunday</span>
-                    <span className="text-gray-900 font-medium">Closed</span>
-                  </div>
-                </div>
-              </div>
+              {/* Soft overlay gradient to blend into form side */}
+              <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-white/70 to-transparent"></div>
             </div>
-          </div>
 
-          {/* Contact Form Card */}
-          <div className="lg:col-span-2">
-            <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-3xl shadow-2xl p-8">
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900">Send us a message</h2>
-              </div>
+            {/* --- Contact Form Section --- */}
+            <div className="w-full p-8 lg:p-10 bg-white">
+              <form
+                ref={formRef}
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                  Send us a message
+                </h2>
 
-              <div className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Name Field */}
-                  <div className="relative">
-                    <input
-                      type="text"
-                      {...register('name', { 
-                        required: 'Name is required',
-                        minLength: { value: 2, message: 'Name must be at least 2 characters' }
-                      })}
-                      className={getFieldClasses('name')}
-                      placeholder="Name"
-                      id="name"
-                    />
-                    <label 
-                      htmlFor="name" 
-                      className={getLabelClasses('name')}
-                    >
-                      Name *
-                    </label>
-                    {errors.name && (
-                      <p className="mt-2 text-sm text-red-600 flex items-center">
-                        <AlertCircle className="w-4 h-4 mr-1" />
-                        {errors.name.message}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Email Field */}
-                  <div className="relative">
-                    <input
-                      type="email"
-                      {...register('email', { 
-                        required: 'Email is required',
-                        pattern: {
-                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                          message: 'Please enter a valid email address'
-                        }
-                      })}
-                      className={getFieldClasses('email')}
-                      placeholder="Email address"
-                      id="email"
-                    />
-                    <label 
-                      htmlFor="email" 
-                      className={getLabelClasses('email')}
-                    >
-                      Email address *
-                    </label>
-                    {errors.email && (
-                      <p className="mt-2 text-sm text-red-600 flex items-center">
-                        <AlertCircle className="w-4 h-4 mr-1" />
-                        {errors.email.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Company Field */}
-                  <div className="relative">
-                    <input
-                      type="text"
-                      {...register('company')}
-                      className={getFieldClasses('company')}
-                      placeholder="Company"
-                      id="company"
-                    />
-                    <label 
-                      htmlFor="company" 
-                      className={getLabelClasses('company')}
-                    >
-                      Company
-                    </label>
-                  </div>
-
-                  {/* Phone Field */}
-                  <div className="relative">
-                    <input
-                      type="tel"
-                      {...register('phone', {
-                        pattern: {
-                          value: /^[\+]?[1-9][\d]{0,15}$/,
-                          message: 'Please enter a valid phone number'
-                        }
-                      })}
-                      className={getFieldClasses('phone')}
-                      placeholder="Phone"
-                      id="phone"
-                    />
-                    <label 
-                      htmlFor="phone" 
-                      className={getLabelClasses('phone')}
-                    >
-                      Phone
-                    </label>
-                    {errors.phone && (
-                      <p className="mt-2 text-sm text-red-600 flex items-center">
-                        <AlertCircle className="w-4 h-4 mr-1" />
-                        {errors.phone.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Subject Field */}
-                <div className="relative">
+                {/* Name & Email */}
+                <div className="grid sm:grid-cols-2 gap-5">
                   <input
                     type="text"
-                    {...register('subject', { 
-                      required: 'Subject is required',
-                      minLength: { value: 5, message: 'Subject must be at least 5 characters' }
-                    })}
-                    className={getFieldClasses('subject')}
-                    placeholder="Subject"
-                    id="subject"
+                    placeholder="Name"
+                    {...register("name", { required: true })}
+                    className={inputClasses}
                   />
-                  <label 
-                    htmlFor="subject" 
-                    className={getLabelClasses('subject')}
-                  >
-                    Subject *
-                  </label>
-                  {errors.subject && (
-                    <p className="mt-2 text-sm text-red-600 flex items-center">
-                      <AlertCircle className="w-4 h-4 mr-1" />
-                      {errors.subject.message}
-                    </p>
-                  )}
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    {...register("email", { required: true })}
+                    className={inputClasses}
+                  />
                 </div>
 
-                {/* Message Field */}
-                <div className="relative">
-                  <textarea
-                    {...register('message', { 
-                      required: 'Message is required',
-                      minLength: { value: 10, message: 'Message must be at least 10 characters' }
-                    })}
-                    rows={5}
-                    className={getFieldClasses('message')}
-                    placeholder="Message"
-                    id="message"
-                  ></textarea>
-                  <label 
-                    htmlFor="message" 
-                    className={getLabelClasses('message')}
-                  >
-                    Message *
-                  </label>
-                  {errors.message && (
-                    <p className="mt-2 text-sm text-red-600 flex items-center">
-                      <AlertCircle className="w-4 h-4 mr-1" />
-                      {errors.message.message}
-                    </p>
-                  )}
+                {/* Phone & Company */}
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <input
+                    type="tel"
+                    placeholder="Phone (Optional)"
+                    {...register("phone")}
+                    className={inputClasses}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Company name (Optional)"
+                    {...register("company")}
+                    className={inputClasses}
+                  />
                 </div>
 
-                {/* Success/Error Messages */}
-                {submitStatus === 'success' && (
-                  <div className="bg-lime-50 border-l-4 border-lime-500 rounded-lg p-4">
-                    <div className="flex items-center">
-                      <CheckCircle className="w-5 h-5 text-lime-600 mr-3" />
-                      <p className="text-lime-800 font-medium">
-                        Thank you! Your message has been sent successfully. {"We'll"} get back to you soon.
-                      </p>
-                    </div>
-                  </div>
-                )}
+                {/* Message */}
+                <textarea
+                  placeholder="Please type your message here..."
+                  rows={5}
+                  {...register("message", { required: true })}
+                  className={textareaClasses}
+                />
 
-                {submitStatus === 'error' && (
-                  <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-4">
-                    <div className="flex items-center">
-                      <AlertCircle className="w-5 h-5 text-red-600 mr-3" />
-                      <p className="text-red-800 font-medium">
-                        Sorry, there was an error sending your message. Please try again.
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Submit Button */}
-                <div className="pt-4 w-full flex justify-center items-center">
+                {/* Submit */}
+                <div className="pt-4">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className=" w-1/3 bg-gradient-to-r from-gray-800 to-gray-700 hover:from-gray-900 hover:to-gray-900 disabled:from-lime-300 disabled:to-lime-400 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-200 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                    className="bg-gradient-to-r from-lime-600 to-green-600 hover:from-lime-700 hover:to-green-700 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                        <span>SENDING...</span>
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                        Sending...
                       </>
                     ) : (
                       <>
-                        <Send className="w-5 h-5" />
-                        <span>SEND MESSAGE</span>
+                        Send Message
+                        <SendHorizonal className="w-4 h-4 ml-3" />
                       </>
                     )}
                   </button>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>
